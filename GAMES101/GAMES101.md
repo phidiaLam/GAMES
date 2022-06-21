@@ -17,5 +17,14 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - $\vec{a}\cdot\vec{b}=\vec{b}\cdot\vec{a}$
     - $\vec{a}\cdot(\vec{b}+\vec{c})=\vec{a}\cdot\vec{b}+\vec{a}\cdot\vec{c}$
     - $(k\vec{a})\cdot\vec{b} = \vec{a}\cdot(k\vec{b})=k(\vec{a}\cdot\vec{b})$
+- 笛卡尔坐标系表示点乘
+    - 二维
+      $\vec{a}\cdot\vec{b}=\begin{pmatrix} x_a\\ y_a\\ \end{pmatrix}\cdot\begin{pmatrix} x_b\\ y_b\\ \end{pmatrix} = x_ax_b+y_ay_b$
+    - 三维
+      $\vec{a}\cdot\vec{b}\cdot\vec{c}=\begin{pmatrix} x_a\\ y_a\\ z_a\\ \end{pmatrix}\cdot\begin{pmatrix} x_b\\ y_b\\ z_b\\ \end{pmatrix} = x_ax_b+y_ay_b+z_az_b$
+- 用途
+    - 点乘相当于一个向量投影到另一个向量上的长度向乘法
+    <img src="./image/dot_projection.png" alt="点乘投影图像" width="300px"></img>
+    - 可用于判断一个向量与另一个向量的前后或者垂直关系
 
 ### 叉乘（Cross prduct）
