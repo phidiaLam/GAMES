@@ -26,6 +26,8 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 点乘相当于一个向量投影到另一个向量上的长度向乘法
     <img src="./image/dot_projection.png" alt="点乘投影图像" width="300px"></img>
     - 可用于判断一个向量与另一个向量的前后或者垂直关系
+    <img src="./image/dot_forward.png" alt="点乘投影图像" width="300px"></img>
+
 
 ### 叉乘（Cross prduct）
 - 基本运算
