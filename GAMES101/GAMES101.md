@@ -1,7 +1,6 @@
 # GAMES101
 
 ## 线性代数基础
-
 ### 定义与基本
 - 向量定义：$\vec{AB} = B - A$
 - 向量相加可以通过两种表示：三角形相加法、平行四边形相加法
@@ -26,7 +25,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 点乘相当于一个向量投影到另一个向量上的长度向乘法
     <img src="./image/dot_projection.png" alt="点乘投影图像" width="300px"></img>
     - 可用于判断一个向量与另一个向量的前后或者垂直关系
-    <img src="./image/dot_forward.png" alt="点乘投影图像" width="300px"></img>
+    <img src="./image/dot_forward.png" alt="判断向量前后" width="300px"></img>
 
 
 ### 叉乘（Cross prduct）
@@ -71,3 +70,54 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     $\vec{a}\cdot\vec{b}=\vec{a}^T\vec{b}=\begin{pmatrix} x_a&y_a&z_a\\ \end{pmatrix}\begin{pmatrix} x_b\\ y_b\\ z_b\\ \end{pmatrix}=x_ax_b+y_ay_b+z_az_b$
 - 叉乘
     $\vec{a}\times\vec{b}=A^*b=\begin{pmatrix} 0&-z_a&y_a\\ z_a&0&-x_a\\ -y_a&x_a&0\\ \end{pmatrix}\begin{pmatrix} x_b\\ y_b\\ z_b\\ \end{pmatrix}$  &nbsp; $A^*$是$\vec{a}$的对偶矩阵
+<br/>
+<br/>
+
+## 向量与图形的变换
+
+### 线性变换
+- 缩放
+    $\begin{bmatrix} x'\\ y'\\ \end{bmatrix} = \begin{bmatrix} s_x&0\\ 0&s_y\\ \end{bmatrix}\begin{bmatrix} x\\ y\\ \end{bmatrix}$
+- 斜切
+    $\begin{bmatrix} x'\\ y'\\ \end{bmatrix} = \begin{bmatrix} 1&a\\ 0&1\\ \end{bmatrix}\begin{bmatrix} x\\ y\\ \end{bmatrix}$
+- 旋转
+    $\begin{bmatrix} x'\\ y'\\ \end{bmatrix} = \begin{bmatrix} cos\theta&-sin\theta\\ sin\theta&cos\theta\\ \end{bmatrix}\begin{bmatrix} x\\ y\\ \end{bmatrix}$
+    <img src="./image/rotate.png" alt="矩阵旋转" width="300px"></img>
+- 总结
+    $x'=ax+by$
+    $y'=cx+dy$
+    $\begin{bmatrix} x'\\ y'\\ \end{bmatrix} = \begin{bmatrix} a&b\\ c&d\\ \end{bmatrix}\begin{bmatrix} x\\ y\\ \end{bmatrix}$
+    $x'=Mx$
+### 齐次坐标
+- 为什么要引入其次坐标？
+    - 上述均为线性变换，若为平移这种变换，将无法现成统一的$x'=Mx$形式
+    - 平移公式为：
+        $x'=x+t_x$
+        $y'=y+t_y$
+         $\begin{bmatrix} x'\\ y'\\ \end{bmatrix} = \begin{bmatrix} a&b\\ c&d\\ \end{bmatrix}\begin{bmatrix} x\\ y\\ \end{bmatrix}+\begin{bmatrix} t_x\\ t_y\\ \end{bmatrix}$
+- 定义
+    - 在原有的坐标急促上再加一个纬度
+      对于2D的点：$(x, y, 1)^T$
+      对于2D的向量：$(x, y, 0)^T$
+    - 这样子，原有的2d向量变化就变为：
+     $\begin{pmatrix} x'\\ y'\\ w'\\ \end{pmatrix} = \begin{pmatrix} 1&0&t_x\\ 0&1&t_y\\ 0&0&1\\ \end{pmatrix}\cdot\begin{pmatrix} x\\ y\\ 1\\ \end{pmatrix}=\begin{pmatrix} x+t_x\\ y+t_y\\ 1\\ \end{pmatrix}$
+    - 在引入齐次坐标后，线性变化+平移变成了：
+     $\begin{bmatrix} x'\\ y'\\ \end{bmatrix} = \begin{bmatrix} a&b\\ c&d\\ \end{bmatrix}\begin{bmatrix} x\\ y\\ \end{bmatrix}+\begin{bmatrix} t_x\\ t_y\\ \end{bmatrix}$ $\rightarrow$ $\begin{pmatrix} x'\\ y'\\ w'\\ \end{pmatrix} = \begin{pmatrix} a&b&t_x\\ c&d&t_y\\ 0&0&1\\ \end{pmatrix}\cdot\begin{pmatrix} x\\ y\\ 1\\ \end{pmatrix}$
+- 变化
+    - 缩放
+    $S(s_x,s_y)=\begin{pmatrix} s_x&0&0\\ 0&s_y&0\\ 0&0&1\\ \end{pmatrix}$
+    - 旋转
+    $R(\alpha)=\begin{pmatrix} cos\alpha&-sin\alpha&0\\ sin\alpha&cos\alpha&0\\ 0&0&1\\ \end{pmatrix}$
+    - 平移
+    $T(t_x,t_y)=\begin{pmatrix} 1&0&t_x\\ 0&1&t_y\\ 0&0&1\\ \end{pmatrix}$
+- 逆矩阵
+    - 可通过逆矩阵$M^{-1}$对操作进行返回重置
+
+### 组合移动
+- 移动的表示
+    <img src="./image/transform.png" alt="组合移动" width="300px"></img>
+- 计算的顺序
+    - $R_{45}\cdot T_{(1,0)} \neq T_{(1,0)}\cdot R_{45}$
+    - 
+    - 示例： $T_{(1,0)}\cdot R_{45} \begin{bmatrix} x\\ y\\ 1\\ \end{bmatrix}=\begin{bmatrix} 1&0&1\\ 0&1&0\\ 0&0&1\\ \end{bmatrix}\begin{bmatrix} cos45^{\circ}&-sin45^{\circ}&0\\ sin45^{\circ}&cos45^{\circ}&0\\ 0&0&1\\ \end{bmatrix}$ 
+
