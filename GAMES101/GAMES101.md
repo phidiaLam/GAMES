@@ -1,4 +1,6 @@
 # GAMES101
+[TOC]
+
 
 ## 线性代数基础
 ### 定义与基本
@@ -118,13 +120,81 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 - 逆矩阵
     - 可通过逆矩阵$M^{-1}$对操作进行返回重置
 
-### 组合移动
+### 组合移动(二维)
 - 移动的表示
     <img src="./image/transform.png" alt="组合移动" width="300px"></img>
 - 计算的顺序
     - $R_{45}\cdot T_{(1,0)} \neq T_{(1,0)}\cdot R_{45}$
-    - 
     - 示例： $T_{(1,0)}\cdot R_{45} \begin{bmatrix} x\\ y\\ 1\\ \end{bmatrix}=\begin{bmatrix} 1&0&1\\ 0&1&0\\ 0&0&1\\ \end{bmatrix}\begin{bmatrix} cos45^{\circ}&-sin45^{\circ}&0\\ sin45^{\circ}&cos45^{\circ}&0\\ 0&0&1\\ \end{bmatrix}$ 
 
-### 复杂的组合移动
+### 复杂的组合移动（三维）
+- 齐次坐标定义
+    对于2D的点：$(x, y, z, 1)^T$
+    对于2D的向量：$(x, y, z, 0)^T$
+    $(x, y, z, w)(w\neq0)$表示的点就是$(x/w, y/w, z/w)$
+- 3D仿射变换
+    $\begin{pmatrix} x'\\ y'\\ z'\\ 1\\ \end{pmatrix} = \begin{pmatrix} a&b&c&t_x\\ d&e&f&t_y\\ g&h&i&t_z\\ 0&0&0&1\\ \end{pmatrix}\cdot\begin{pmatrix} x\\ y\\ z\\ 1\\ \end{pmatrix}$
+    - 缩放
+        $S(s_x,s_y,s_z)=\begin{pmatrix} s_x&0&0&0\\ 0&s_y&0&0\\ 0&0&s_z&0\\ 0&0&0&1\\ \end{pmatrix}$
+    - 平移
+        $T(t_x,t_y,t_z)=\begin{pmatrix} 1&0&0&t_x\\ 0&1&0&t_y\\ 0&0&1&t_z\\ 0&0&0&1\\ \end{pmatrix}$
+    - 旋转（这个复杂点）
+        $R_x(\alpha)=\begin{pmatrix} 1&0&0&0\\ 0&cos\alpha&-sin\alpha&0\\ 0&sin\alpha&cos\alpha&0\\ 0&0&0&1\\ \end{pmatrix}$
+        $R_y(\alpha)=\begin{pmatrix} cos\alpha&0&sin\alpha&0\\ 0&1&0&0\\ -sin\alpha&0&cos\alpha&0\\ 0&0&0&1\\ \end{pmatrix}$
+        $R_x(\alpha)=\begin{pmatrix} cos\alpha&-sin\alpha&0&0\\ sin\alpha&cos\alpha&0&0\\ 0&0&1&0\\ 0&0&0&1\\ \end{pmatrix}$
+        为什么y会与众不同？因为有顺序存在，$\vec{x}\times\vec{z}=-\vec{y}$
+- 复杂的旋转
+    - 将复杂旋转分解成简单旋转
+        $R_{xyz}(\alpha,\beta,\gamma)=R_x(\alpha)R_y(\beta)R_z(\gamma)$
+        这三个角被称为欧拉角
+    - 罗德里格旋转公式
+        $R(n,\alpha)=cos(\alpha)I+(1-cos(\alpha))nn^T+sin(\alpha)\begin{pmatrix} 0&-n_z&n_y\\ n_z&0&-n_x\\ -n_y&n_x&0\\ \end{pmatrix}$ 
+        沿$n$轴旋转$\alpha$度，$I$为单位矩阵
+
+## VIEWING 变换
+
+### 视图变换
+- 定义一个相机
+    - 位置 $\vec{e}$
+    - 视线方向 $\widehat{g}$
+    - 向上方向 $\widehat{t}$
+- 关键点
+    - 相机放于原点，向上方向为Y， 看的方向为-Z
+    - 并且随着相机变化物体
+- 固定相机操作矩阵
+    $M_{view}=R_{view}T_{view}$
+    - 移动到原点
+        $T_{view}=\begin{bmatrix} 1&0&0&-x_e\\ 0&1&0&-y_e\\ 0&0&1&-z_e\\ 0&0&0&1\\ \end{bmatrix}$
+    - 旋转$g$到$-Z$，$t$到$Y$, $(g\times t)$到$X$
+    - 因为上述操作复杂，先考虑逆旋转：$X$到$(g\times t)$，$Y$到$t$，$-Z$到$g$
+        $R_{view}^{-1}=\begin{bmatrix} x_{\widehat{g}\times\widehat{t}}&x_t&x_{-g}&0\\ y_{\widehat{g}\times\widehat{t}}&y_t&y_{-g}&0\\ z_{\widehat{g}\times\widehat{t}}&z_t&z_{-g}&0\\ 0&0&0&1 \end{bmatrix}$
+        $R_{view}=\begin{bmatrix} x_{\widehat{g}\times\widehat{t}}&y_{\widehat{g}\times\widehat{t}}&z_{\widehat{g}\times\widehat{t}}&0\\ x_t&y_t&z_t&0\\ x_{-g}&y_{-g}&z_{-g}&0\\ 0&0&0&1\\ \end{bmatrix}$
+        因为旋转矩阵是正交矩阵，忘记了往上找
+        
+### 投影变换
+#### 正交投影
+- 简单理解
+    - 相机摆放到原点位置，看向$-Z$，朝向上$Y$。
+    - 扔掉$Z$坐标
+    - 平移和缩放到$[-1, 1]^2$的范围内
+    <img src="./image/define_ortho.png" alt="正交投影简单理解" width="300px"></img>
+- 生成正交投影
+    我们想要将一个长方体$[l,r]\times[b,t]\times[f,n]$转变为一个$[-1,1]^{3}$的标准正方体（canonical“正则，规范，标准”）
+    <img src="./image/general_ortho.png" alt="正交投影的生成" width="600px"></img>
+    - 移动矩阵
+    $M_{ortho}=\begin{bmatrix} \frac{2}{r-l}&0&0&0\\ 0&\frac{2}{t-b}&0&0\\ 0&0&\frac{2}{n-f}&0\\\ 0&0&0&1\\ \end{bmatrix}\begin{bmatrix} 1&0&0&-\frac{r+l}{2}\\ 0&1&0&-\frac{t+b}{2}\\ 0&0&1&-\frac{n+f}{2}\\\ 0&0&0&1\\ \end{bmatrix}$
+    **注意：这边采用右手系，为$-Z$。部分API如OpenGL采用左手系（$f>n$）**
+
+#### 透视投影
+- 前提
+    - $(x,y,z,1),(kx,ky,kz,k\neq0)$,$(xz,yz,z^2,z\neq0)$都是表示同一个在3D中的点$(x,y,z)$
+    这个后面很有用，你要问我为什么？不知道，还没学到后面
+- 怎么做透视投影
+    - 将锥体压缩成一个长方体$(n\rightarrow n, f\rightarrow f)(M_{persp\rightarrow ortho})$
+    - 再做正交投影
+    <img src="./image/persp_ortho.png" alt="如何做透视投影" width="400px"></img>
+- 压缩成长方形
+    - 利用相似三角形计算挤压的变形
+    <img src="./image/similar_triangle.png" alt="通过相似三角形来挤压" width="400px"></img>
+    $x'=\frac{n}{z}x$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $y'=\frac{n}{z}y$
 
