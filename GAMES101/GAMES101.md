@@ -197,6 +197,37 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 利用相似三角形计算挤压的变形
     <img src="./image/similar_triangle.png" alt="通过相似三角形来挤压" width="400px"></img>
     $x'=\frac{n}{z}x$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $y'=\frac{n}{z}y$
-    远的平面：$M_{persp\rightarrow ortho}^{(4\times4)}\begin{pmatrix} x\\ y\\ z\\ 1\\ \end{pmatrix} \Rightarrow \begin{pmatrix} \frac{nx}{z}\\ \frac{ny}{z}\\ 不知道\\ 1\\ \end{pmatrix}==\begin{pmatrix} nx\\ ny\\ 不知道\\ z\\ \end{pmatrix}$
-    近的平面：$\begin{pmatrix} x\\ y\\ n\\ 1\\ \end{pmatrix}\Rightarrow\begin{pmatrix} x\\ y\\ n\\ 1\\ \end{pmatrix}==\begin{pmatrix} nx\\ ny\\ n^2\\ n\\ \end{pmatrix}$
+    - 远的平面：$M_{persp\rightarrow ortho}^{(4\times4)}\begin{pmatrix} x\\ y\\ z\\ 1\\ \end{pmatrix} \Rightarrow \begin{pmatrix} \frac{nx}{z}\\ \frac{ny}{z}\\ 不知道\\ 1\\ \end{pmatrix}==\begin{pmatrix} nx\\ ny\\ 不知道\\ z\\ \end{pmatrix}$
+    用以上可以推导出：
+    $M_{persp\rightarrow ortho}=\begin{pmatrix} n&0&0&0\\ 0&n&0&0\\ ?&?&?&?\\ 0&0&1&0\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp; 忘记了？代入乘一下就知道了，那么现在问题就是要把那几个问号填上值。
+    我们就利用两点。
+        1. 任何在较近的面的点是不会改变的
+        2. 任何在z轴的点是不会改变的
+    - 近的平面：$\begin{pmatrix} x\\ y\\ n\\ 1\\ \end{pmatrix}\Rightarrow\begin{pmatrix} x\\ y\\ n\\ 1\\ \end{pmatrix}==\begin{pmatrix} nx\\ ny\\ n^2\\ n\\ \end{pmatrix}$
+    第三行值能是$\begin{pmatrix}0&0&A&B\\ \end{pmatrix}\begin{pmatrix}x\\y\\n\\1\\ \end{pmatrix}=n^2\rightarrow An+B=n^2$
+    因为不存在x与y的值，**但！**这个第三行还没有完全算出来。（第一个性质）
+    第二个性质，在远平面上，z轴上的点也满足这个性质
+    $\begin{pmatrix} 0\\ 0\\ f\\ 1\\ \end{pmatrix}\Rightarrow \begin{pmatrix} 0\\ 0\\ f\\ 1\\ \end{pmatrix}== \begin{pmatrix} 0\\ 0\\ f^2\\ f\\ \end{pmatrix}\rightarrow Af+b=f^2$
+    - 通过上述两个式子就可以求得  
+    $\left\{
+        \begin{array}{ll}
+            A=n+f \\
+            B=-nf 
+        \end{array}
+    \right.$
+    - 最终得到挤压矩阵是：
+    $M_{persp\rightarrow ortho}=\begin{pmatrix} n&0&0&0\\ 0&n&0&0\\ 0&0&n+f&-nf\\ 0&0&1&0\\ \end{pmatrix}$
+- 挤压变换
+    $M_{persp}=M_{ortho}M_{persp\rightarrow ortho}$
+    计算出变换矩阵与正交投影就能得出透视投影
+- 图像学中定义透视投影
+    - 垂直可视角度（fovY）水平长宽比也行
+    - 长宽比
+    <img src="./image/persp_fovY.png" alt="可视角与长宽比" width="400px"></img>
+    $tan\frac{fovY}{2}=\frac{t}{|n|}$
+    $aspect=\frac{r}{t}$
+    
+
+## 光栅化（三角形）
+    
 
