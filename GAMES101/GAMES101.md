@@ -228,6 +228,32 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     $aspect=\frac{r}{t}$
     
 
-## 光栅化（三角形）
-    
+## 光栅化
+    完成MVP后，所有图像将会在一个正则立方体$[-1,1]^3$中
+ - 屏幕「screen」
+    1. 二维数组
+    2. 数组里面每个元素是一个像素
+    3. 是一种典型光栅呈现设备
+    - 光栅化「Raster」
+        把东西画在屏幕上
+    - 像素（抽象简单理解，不完全对）
+        - 一个个小方块
+        - 里面是颜色的混合（<font color="red">红色</font>, <font color="green">绿色</font>, <font color="blue">蓝色</font>）
+- 屏幕上像素点
+    - 像素的坐标用$(x,y)$来表示，所以所有像素可以表示为$(0,0)$到$(width-1,height-1)$
+    - 像素$(x,y)$的中心为$(x+0.5,y+0.5)$，所以整个品目是$(0,0)$到$(width,height)$
+    <img src="./image/pixel_define.png" alt="可视角与长宽比" width="300px"></img>
+- 把正则立方体映射到屏幕上
+    - 去掉z轴
+    - 变换xy平面：$[-1,1]^2$到$[0,width]\times[0,height]$
+    - 视图变换矩阵：
+    $M_{viewport}=\begin{pmatrix} \frac{width}{2}&0&0&\frac{width}{2}\\ 0&\frac{height}{2}&0&\frac{height}{2}\\ 0&0&0&0\\ 0&0&0&1\\ \end{pmatrix}$
+
+### 三角形
+- 为什么选择三角形？
+    - 最基础的多边形
+    - 任何多边形能拆成三角形
+    - 三个点给定的三角形一定是平面的
+    - 三角形的内外定义明确
+    - 三角形三个点给不同属性，可以为三角形内部所有点插值
 
