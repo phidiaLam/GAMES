@@ -256,4 +256,35 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 三个点给定的三角形一定是平面的
     - 三角形的内外定义明确
     - 三角形三个点给不同属性，可以为三角形内部所有点插值
+- 最简单的方法————采样
+    - 定义
+        将函数离散化
+    - 采样三角形
+    $inside(t,x,y)=
+        \begin{cases}
+            1 \quad Point(x,y)\;in\;triangle\;t \\
+            0 \quad otherwise
+        \end{cases}
+    $
+    - 如何采样
+    ``` C++
+    for (int x = 0; x < xmax; ++x) {
+        for (int y = 0; y < ymax; ++y) {
+            image[x][y] = inside(tri, x+0.5, y+0.5);
+        }
+    }
+    ```
+    - 判断一个点是否在三角形内
+    通过三条边与顶点到点的向量相乘，判断点是不是在三条边的同一边，如果是，则在内部。
+    （如果点正好边上，自己定义，说通就好。如果用opengl或directX，上左算内，右下算外）
+    - 没有必要去遍历所有的点
+    解决：取最大与最小的x与y，可以框出一个方形（轴线包围盒），缩小遍历范围。（缩写：AABB）
+    还有很多其他的加速方法。
+        1. 每一行找最左最右
+        等等
+    
+    <img src="./image/triangle_pixel.png" alt="可视角与长宽比" width="300px"></img>
+
+
+
 
