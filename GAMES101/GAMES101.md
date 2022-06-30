@@ -284,7 +284,20 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         等等
     
     <img src="./image/triangle_pixel.png" alt="可视角与长宽比" width="300px"></img>
-
-
-
+## 反走样（抗锯齿）与深度缓冲
+### 反走样
+- 锯齿「走样」（Aliasing）
+    <img src="./image/aliasing.png" alt="走样" width="300px"></img>
+- Artifacts（瑕疵）
+    图形上的各种看上去不太对的东西
+    - 锯齿
+    - 摩尔纹 （Moire pattern）
+    - 车轮效应 （Wagon Wheel effet）
+    原因：信号的变化太快，以至于采样的速度跟不上它
+- 预滤波「预模糊」（Pre—Filtering）
+    <img src="./image/pre-filtering.png" alt="预模糊" width="600px"></img>
+    先对信号做模糊，再对结果进行采样
+    **一定要先模糊再采样，专有名词：Blurred Aliasing** 为什么？
+- 频域
+    - 
 
