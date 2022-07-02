@@ -229,7 +229,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     
 
 ## 光栅化
-    完成MVP后，所有图像将会在一个正则立方体$[-1,1]^3$中
+完成MVP后，所有图像将会在一个正则立方体 $[-1,1]^3$ 中
  - 屏幕「screen」
     1. 二维数组
     2. 数组里面每个元素是一个像素
@@ -300,4 +300,4 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     **一定要先模糊再采样，专有名词：Blurred Aliasing** 为什么？
 - 频域
     - 
-
+完成作业1
