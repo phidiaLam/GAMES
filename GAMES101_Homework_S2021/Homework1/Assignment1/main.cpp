@@ -11,8 +11,11 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
 
     Eigen::Matrix4f translate;
-    translate << 1, 0, 0, -eye_pos[0], 0, 1, 0, -eye_pos[1], 0, 0, 1,
-        -eye_pos[2], 0, 0, 0, 1;
+    translate << 
+        1, 0, 0, -eye_pos[0], 
+        0, 1, 0, -eye_pos[1], 
+        0, 0, 1, -eye_pos[2], 
+        0, 0, 0, 1;
 
     view = translate * view;
 
@@ -23,9 +26,15 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
 {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
 
-    // TODO: Implement this function
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
+    rotation_angle = rotation_angle * 3.1415926 / 180;
+
+    model << 
+        cos(rotation_angle), -sin(rotation_angle), 0, 0,
+        sin(rotation_angle), cos(rotation_angle), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1;
 
     return model;
 }
@@ -37,23 +46,51 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
 
-    // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
+    float top = -tan((eye_fov / 2.0f * 3.1415926 / 180) * abs(zNear));
+    float right = top * aspect_ratio;
+
+    // 压缩矩阵
+    Eigen::Matrix4f persp_ortho = Eigen::Matrix4f::Identity();
+    persp_ortho << 
+        zNear, 0, 0, 0,
+        0, zNear, 0, 0,
+        0, 0, zNear + zFar, -zNear * zFar,
+        0, 0, 1, 0;
+    // 正交投影平移
+    Eigen::Matrix4f ortho_translate = Eigen::Matrix4f::Identity();
+    ortho_translate << 
+        1, 0, 0, -(right + (-right)) / 2,
+        0, 1, 0, -(top + (-top)) / 2,
+        0, 0, 1, -(zNear + zFar) / 2,
+        0, 0, 0, 1;
+    // 正交投影缩放
+    Eigen::Matrix4f ortho_scale = Eigen::Matrix4f::Identity();
+    ortho_scale << 
+        2 / (2 * right), 0, 0, 0,
+        0, 2 / (2 * top), 0, 0,
+        0, 0, 2 / (zFar - zNear), 0,
+        0, 0, 0, 1;
+    Eigen::Matrix4f ortho_matrix = ortho_scale * ortho_translate;
+
+    projection << ortho_matrix * persp_ortho;
 
     return projection;
 }
 
-int main(int argc, const char** argv)
+int main(int argc, const char **argv)
 {
     float angle = 0;
     bool command_line = false;
     std::string filename = "output.png";
 
-    if (argc >= 3) {
+    if (argc >= 3)
+    {
         command_line = true;
         angle = std::stof(argv[2]); // -r by default
-        if (argc == 4) {
+        if (argc == 4)
+        {
             filename = std::string(argv[3]);
         }
     }
@@ -72,7 +109,8 @@ int main(int argc, const char** argv)
     int key = 0;
     int frame_count = 0;
 
-    if (command_line) {
+    if (command_line)
+    {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -88,7 +126,8 @@ int main(int argc, const char** argv)
         return 0;
     }
 
-    while (key != 27) {
+    while (key != 27)
+    {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -104,10 +143,12 @@ int main(int argc, const char** argv)
 
         std::cout << "frame count: " << frame_count++ << '\n';
 
-        if (key == 'a') {
+        if (key == 'a')
+        {
             angle += 10;
         }
-        else if (key == 'd') {
+        else if (key == 'd')
+        {
             angle -= 10;
         }
     }
