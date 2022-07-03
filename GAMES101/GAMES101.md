@@ -298,6 +298,6 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     <img src="./image/pre-filtering.png" alt="预模糊" width="600px"></img>
     先对信号做模糊，再对结果进行采样
     **一定要先模糊再采样，专有名词：Blurred Aliasing** 为什么？
-- 频域
-    - 
-完成作业1
+- 信号处理（主要为了了解一些底层的原因与实现逻辑）
+    
+
