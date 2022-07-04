@@ -299,5 +299,28 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     先对信号做模糊，再对结果进行采样
     **一定要先模糊再采样，专有名词：Blurred Aliasing** 为什么？
 - 信号处理（主要为了了解一些底层的原因与实现逻辑）
-    
-
+    - 频域
+        频域就是记录每个简单正弦信号的相位和频率的方式。可以采用傅里叶变换将一个复杂的信号转换成多个简单的正弦信号，并通过频域来记录
+        <img src="./image/freq_domain.gif" alt="频域与时域" width="800px"></img>
+    - 傅立叶变换
+        - 将一个信号函数分解成多个简单的正弦信号
+        <img src="./image/fourier.png" alt="傅里叶变换图" width="500px"></img>
+        $f(x)=\frac{A}{2}+\frac{2Acos(t\omega)}{\pi}-\frac{2Acos(3t\omega)}{3\pi}+\frac{2Acos(5t\omega)}{5\pi}-\frac{2Acos(7t\omega)}{7\pi}+···$
+        - 可以通过傅里叶变换将时域变换为频域，也可以用反傅里叶变换将频域变换成时域
+        <img src="./image/fourier_inverse.png" alt="傅里叶可逆" width="500px"></img>
+    - 采样不足
+        - 可能导致高频信号看起来如同低频信号，从而造成走样
+        <img src="./image/aliases.png" alt="采样不足" width="500px"></img>
+    - 滤波
+    排除掉一些指定的波频
+    下面是一些例子，其中中心代表低频，旁边代表高频：
+        - 原图：
+        <img src="./image/filter1.png" alt="采样不足" width="200px"></img>
+        - 滤掉高频（Egdes）：
+        <img src="./image/filter2.png" alt="采样不足" width="200px"></img>
+        - 滤掉低频（blur）：
+        <img src="./image/filter3.png" alt="采样不足" width="200px"></img>
+        - 滤掉高频与低频：
+        <img src="./image/filter4.png" alt="采样不足" width="200px"></img>
+        <img src="./image/filter5.png" alt="采样不足" width="200px"></img>
+    - 卷积
