@@ -302,7 +302,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 频域
         频域就是记录每个简单正弦信号的相位和频率的方式。可以采用傅里叶变换将一个复杂的信号转换成多个简单的正弦信号，并通过频域来记录
         <img src="./image/freq_domain.gif" alt="频域与时域" width="800px"></img>
-    - 傅立叶变换
+    - 傅里叶变换
         - 将一个信号函数分解成多个简单的正弦信号
         <img src="./image/fourier.png" alt="傅里叶变换图" width="500px"></img>
         $f(x)=\frac{A}{2}+\frac{2Acos(t\omega)}{\pi}-\frac{2Acos(3t\omega)}{3\pi}+\frac{2Acos(5t\omega)}{5\pi}-\frac{2Acos(7t\omega)}{7\pi}+···$
@@ -315,12 +315,52 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     排除掉一些指定的波频
     下面是一些例子，其中中心代表低频，旁边代表高频：
         - 原图：
-        <img src="./image/filter1.png" alt="采样不足" width="200px"></img>
+        <img src="./image/filter1.png" alt="原图" width="200px"></img>
         - 滤掉高频（Egdes）：
-        <img src="./image/filter2.png" alt="采样不足" width="200px"></img>
+        <img src="./image/filter2.png" alt="滤掉高频" width="200px"></img>
         - 滤掉低频（blur）：
-        <img src="./image/filter3.png" alt="采样不足" width="200px"></img>
+        <img src="./image/filter3.png" alt="滤掉低频" width="200px"></img>
         - 滤掉高频与低频：
-        <img src="./image/filter4.png" alt="采样不足" width="200px"></img>
-        <img src="./image/filter5.png" alt="采样不足" width="200px"></img>
+        <img src="./image/filter4.png" alt="滤掉高频与低频" width="200px"></img>
+        <img src="./image/filter5.png" alt="滤掉高频与低频" width="200px"></img>
     - 卷积
+        通过将周围的值以一定比例相加得到当前位置的值，可以使得图像模糊等
+        - 卷积定理
+            - 直接对时域做卷积
+            - 转换频域做卷积
+                1. 转换为频域（傅里叶变换）
+                2. 乘上就按转换后的卷积核
+                3. 转换为频域（反傅里叶变换）
+            <img src="./image/convolution_theorem.png" alt="滤掉高频与低频" width="400px"></img> 
+        - 归一化操作
+            取周围总共九个像素来获取中间像素的值，就需要乘于$\frac{1}{9}$
+    - 频域上的采样
+        <img src="./image/sampling_fraq.png" alt="采样" width="400px"></img> 
+        (c)里面的箭头是离散函数，与(a)图乘积就是(a)的离散的点得到(e)图的结果。
+        左边为时域，右边为频域
+        采样就是再重复一个原始信号的频谱
+    - 走样
+        <img src="./image/aliasing_freq.png" alt="走样" width="400px"></img> 
+        采样点越稀疏，采样点大，对应到频谱上中间的间隔就会越小。原始信号与复制粘贴后中间重叠导致走眼。
+    - 反走样
+        - 增加采样率
+        - 对原始信号进行模糊
+            1. 砍掉高频信号
+            2. 再进行复制粘贴，就不会造成重叠，从而防止走样
+    - 把三角形变模糊
+        对每一个像素做卷积操作，求平均值，从而达到滤波的效果。
+        <img src="./image/dim.png" alt="模糊" width="400px"></img> 
+        对每个像素的覆盖区域计算平均
+        - MSAA
+            - 将一个像素划分成多个像素点，判断每个点重心的着色，将该像素里面所有值加起来做平均从而获得该像素的值。
+            <img src="./image/msaa1.png" alt="MSAA" width="400px"></img> 
+            <img src="./image/msaa.png" alt="MSAA" width="400px"></img> 
+        - FXAA (Fast Approximate AA) 
+            1. 先得到有锯齿的图
+            2. 找到边界，换成无锯齿边界
+        - TAA (Temporal AA) 
+            - 通过上一帧的信息来做抗锯齿
+    - 扩展：超分别率
+        与抗锯齿相似
+        - DLSS (Deep Learning Super Sampling)
+
