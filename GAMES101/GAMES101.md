@@ -363,4 +363,41 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 扩展：超分别率
         与抗锯齿相似
         - DLSS (Deep Learning Super Sampling)
+### 深度缓冲
+- 画家算法
+    - 定义：
+        从远处先画，再画前面的面来覆盖后面的面
+    - 排序深度：
+        复杂度：$O(nlogn)$
+    - 缺陷:
+        三角形深度不统一，无法进行排序
+        <img src="./image/depth_wrong.png" alt="深度排序错误" width="400px"></img>
+- 深度缓冲（Z-Buffer）
+    - 定义
+        对每个像素进行前后排序
+    - 步骤 
+        同时渲染成品图片（frame buffer）与任何一个像素对应的像素（depth buffer「z-buffer」）
+        **越小的$z\rightarrow$近，越大的$z\rightarrow$远**
+    - 过程
+        1. 初始化深度缓存，使得所有深度都是无限远的
+        2. 
+        ``` C++
+        for(each triangle T)
+            for(each sample (x,y,z) in T)
+                if (z < zbuffer[x, y])          //比之前记录的深度更小
+                    framebuffer[x, y] = rgb;    // 更新颜色
+                    zbuffer[x, y] = z;          // 更新深度
+                else
+                    ;                           // 什么也不做
+        ```
+        图解：
+        <img src="./image/depth_triangle.png" alt="深度排序错误" width="400px"></img>
+    - 复杂度
+        深度缓冲复杂度为$O(n)$
+        注意：这边没有排序
 
+## 着色
+图形学上着色是对不同的物体应用不同的材质
+### 照明和影子
+
+### 图形管道
