@@ -398,6 +398,17 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 
 ## 着色
 图形学上着色是对不同的物体应用不同的材质
-### 照明和影子
+### 照明与着色
+- Blinn-Phong反射模型——基础着色模型
+    - 着色三种部分
+        1. 高光
+        2. 漫反射
+        3. 环境光照
+    - 定义局部着色着色点（shading point） 
+        - 法线 n
+        - 观测方向 v
+        - 光照方向 l
+        - 平面参数 （颜色，shininess，...）
+        <img src="./image/shading_point.png" alt="着色点" width="400px"></img> 
 
-### 图形管道
+### 图形管线
