@@ -402,7 +402,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 - Blinn-Phong反射模型——基础着色模型
     - 着色三种部分
         1. 高光
-        2. 漫反射
+        2. 漫反射 diffuse
         3. 环境光照
     - 定义局部着色着色点（shading point） 
         - 法线 n
@@ -410,5 +410,17 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         - 光照方向 l
         - 平面参数 （颜色，shininess，...）
         <img src="./image/shading_point.png" alt="着色点" width="400px"></img> 
+    - 漫反射
+        - 光打到一个点上，光会向各个方向反射出去
+            <img src="./image/diffuse.png" alt="漫反射" width="300px"></img> 
+        - 接收：与角度有关系 $cos\theta=l\cdot n$
+            <img src="./image/lambert.png" alt="反射角度" width="300px"></img> 
+        - 发射：点光源
+            <img src="./image/light_falloff.png" alt="点光源能量" width="400px"></img> 
+            任何时刻，点光源辐射的能量一定在一个球壳上
+            因为能量守恒，离中心越远，单位面积能量越小（与距离平方成反比 I）
+        - 计算
+            - $L_d=k_d(I/r^2)max(0,n\cdot l)$
+            - $L_d$漫反射反射的能量，$I$为单位距离一个点的能量强度，$k_d$为漫反射材质，$0$因为负数没有意义，从背面打过来的光。
 
 ### 图形管线
