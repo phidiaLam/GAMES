@@ -401,9 +401,9 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 ### 照明与着色
 - Blinn-Phong反射模型——基础着色模型
     - 着色三种部分
-        1. 高光
-        2. 漫反射 diffuse
-        3. 环境光照
+        1. 高光 Specular
+        2. 漫反射 Diffuse
+        3. 环境光照 Ambient
     - 定义局部着色着色点（shading point） 
         - 法线 n
         - 观测方向 v
@@ -422,5 +422,13 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         - 计算
             - $L_d=k_d(I/r^2)max(0,n\cdot l)$
             - $L_d$漫反射反射的能量，$I$为单位距离一个点的能量强度，$k_d$为漫反射材质，$0$因为负数没有意义，从背面打过来的光。
+    - 高光
+        - 根据镜面反射获得光线的反射方向，视线所看到的高光强度取决于视线方向
+         <img src="./image/specular_r.png" alt="反射与视线" width="200px"></img> 
+        - 优化模型，半程向量（容易计算）
+         <img src="./image/specular.png" alt="反射与视线" width="200px"></img> 
+        $\vec{h} = bisector(\vec{v},\vec{l})$
+        $\quad = \frac{\vec{v}+\vec{l}}{|\!|\vec{v}+\vec{l}|\!|}$ 通过两个向量相加除与长度，得到为单位长度的半程向量
+                  
 
 ### 图形管线
