@@ -33,6 +33,34 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     // TODO: Copy-paste your implementation from the previous assignment.
     Eigen::Matrix4f projection;
 
+    float top = -tan((eye_fov / 2.0f * MY_PI / 180) * abs(zNear));
+    float right = top * aspect_ratio;
+
+    // 压缩矩阵
+    Eigen::Matrix4f persp_ortho = Eigen::Matrix4f::Identity();
+    persp_ortho << 
+        zNear, 0, 0, 0,
+        0, zNear, 0, 0,
+        0, 0, zNear + zFar, -zNear * zFar,
+        0, 0, 1, 0;
+    // 正交投影平移
+    Eigen::Matrix4f ortho_translate = Eigen::Matrix4f::Identity();
+    ortho_translate << 
+        1, 0, 0, -(right + (-right)) / 2,
+        0, 1, 0, -(top + (-top)) / 2,
+        0, 0, 1, -(zNear + zFar) / 2,
+        0, 0, 0, 1;
+    // 正交投影缩放
+    Eigen::Matrix4f ortho_scale = Eigen::Matrix4f::Identity();
+    ortho_scale << 
+        2 / (2 * right), 0, 0, 0,
+        0, 2 / (2 * top), 0, 0,
+        0, 0, 2 / (zNear - zFar), 0,
+        0, 0, 0, 1;
+    Eigen::Matrix4f ortho_matrix = ortho_scale * ortho_translate;
+
+    projection = ortho_matrix * persp_ortho;
+
     return projection;
 }
 
