@@ -275,7 +275,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     }
     ```
     - 判断一个点是否在三角形内
-    通过三条边与顶点到点的向量相乘，判断点是不是在三条边的同一边，如果是，则在内部。
+    通过三条边与顶点到点的向量叉乘，判断点是不是在三条边的同一边，如果是，则在内部。
     （如果点正好边上，自己定义，说通就好。如果用opengl或directX，上左算内，右下算外）
     - 没有必要去遍历所有的点
     解决：取最大与最小的x与y，可以框出一个方形（轴线包围盒），缩小遍历范围。（缩写：AABB）
@@ -405,9 +405,9 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         2. 漫反射 Diffuse
         3. 环境光照 Ambient
     - 定义局部着色着色点（shading point） 
-        - 法线 n
-        - 观测方向 v
-        - 光照方向 l
+        - 法线 $\widehat{n}$
+        - 观测方向 $\widehat{v}$
+        - 光照方向 $\widehat{l}$
         - 平面参数 （颜色，shininess，...）
         <img src="./image/shading_point.png" alt="着色点" width="400px"></img> 
     - 漫反射
@@ -420,15 +420,108 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
             任何时刻，点光源辐射的能量一定在一个球壳上
             因为能量守恒，离中心越远，单位面积能量越小（与距离平方成反比 I）
         - 计算
-            - $L_d=k_d(I/r^2)max(0,n\cdot l)$
+            - $L_d=k_d(I/r^2)max(0,\widehat{n}\cdot \widehat{l})$
             - $L_d$漫反射反射的能量，$I$为单位距离一个点的能量强度，$k_d$为漫反射材质，$0$因为负数没有意义，从背面打过来的光。
+        - 示例
+            <img src="./image/diffuse_example.png" alt="漫反射例子" width="600px"></img> 
     - 高光
         - 根据镜面反射获得光线的反射方向，视线所看到的高光强度取决于视线方向
          <img src="./image/specular_r.png" alt="反射与视线" width="200px"></img> 
         - 优化模型，半程向量（容易计算）
-         <img src="./image/specular.png" alt="反射与视线" width="200px"></img> 
-        $\vec{h} = bisector(\vec{v},\vec{l})$
-        $\quad = \frac{\vec{v}+\vec{l}}{|\!|\vec{v}+\vec{l}|\!|}$ 通过两个向量相加除与长度，得到为单位长度的半程向量
-                  
+         <img src="./image/specular.png" alt="半程向量" width="200px"></img> 
+        $\widehat{h} = bisector(\widehat{v},\widehat{l})$
+        $\quad = \frac{\widehat{v}+\widehat{l}}{|\!|\widehat{v}+\widehat{l}|\!|}$ 通过两个向量相加除与长度，得到为单位长度的半程向量
+        $L_s = k_s(I/r^2)max(0,cos\alpha)^p$
+        $\quad\; = k_s(I/r^2)max(0,\widehat{n}\cdot\widehat{h})^p$
+        这里指数$p$用于降低容忍度
+         <img src="./image/lobe.png" alt="降低容忍度" width="600px"></img> 
+        - 示例 
+        <img src="./image/specular_example.png" alt="高光变化例子" width="600px"></img> 
+    - 环境光
+        - 假设所有点接受到的光是一样的，保证没有一个点是全黑的
+        <img src="./image/ambient.png" alt="环境光" width="200px"></img> 
+        - $L_a=k_aI_a$
+        - 是个很大胆的假设，这是不真实的，更真实的是全局光照
+    - 总结
+        - 最终公式
+            $L = L_a+L_d+Ls$
+            $\quad = k_aI_a + k_d(I/r^2)max(0,\widehat{n}\cdot \widehat{l}) + k_s(I/r^2)max(0,\widehat{n}\cdot\widehat{h})^p$
+            <img src="./image/blinn-phong.png" alt="Blinn-Phong反射模型" width="600px"></img> 
+- 着色频率
+    - 三种着色频率
+        - 平面着色频率（Flat shading）
+            - 每个三角形平面同一法线，所以每个内部结果一致
+            - 不够丝滑 ~~（德芙看了都摇头）~~
+            <img src="./image/flat_shading.png" alt="平面着色频率" width="200px"></img>
+        - 高洛德着色频率 （Gourand shading）
+            - 在每个顶点进行着色，后对三角形里面的每个点进行插值
+            <img src="./image/gourand_shading.png" alt="高洛德着色频率" width="200px"></img>
+        - Phong着色频率（Phong shading）
+            - 求出三角形三个顶点的发现，后插值三角形每个点的法线，求出每个点的值
+            <img src="./image/phong_shading.png" alt="Phong着色频率" width="200px">
+    - 求顶点向量
+        - 假设是一个球体，顶点向量就是从圆心到顶点的向量
+        - 其他来说，根据周围的平面来算出平均的法线就是顶点法线
+            $N_v=\frac{\sum_{i}N_i}{||\sum_{i}N_i||}$
+            <img src="./image/vertex_normal.png" alt="顶点法线" width="200px"></img>
+            可以根据顶点关于的面的面积进行加权
+    - 法线插值问题
+        - 需要使用重心坐标，往后看
 
-### 图形管线
+
+### 图形管线（Real-time Rendering 实时渲染管线）
+- 五个步骤
+    1. 顶点处理：三维空间的点投影到屏幕上
+    2. 三角形处理：连接点形成三角形
+    3. 光栅化：离散的点光栅化
+    4. 分片处理：着色
+    5. 帧缓冲操作：显示
+    <img src="./image/graph_pipeline.png" alt="图形管线过程" width="600px"></img>
+    分步图例：
+    <img src="./image/pipe1.png" alt="图形管线过程" width="600px"></img>
+    <img src="./image/pipe2.png" alt="图形管线过程" width="600px"></img>
+    <img src="./image/pipe3.png" alt="图形管线过程" width="600px"></img>
+    <img src="./image/pipe4.png" alt="图形管线过程" width="600px"></img>
+    <img src="./image/pipe5.png" alt="图形管线过程" width="600px"></img>
+    着色与贴图在两个不同的地方都可能出现，这要看选取什么着色频率。
+- 程序中的着色（顶点和像素）
+    - shader 每个顶点或者像素通用的着色程序
+    opengl着色语言（简称GLSL）程序：
+    ``` C++
+    uniform sampler2D myTexture;                    // 材质全局变量
+    uniform vec3 lightDir;                          // 光线方向全局变量 
+    varying vec2 uv;                                // 
+    varying vec3 norm;                              // 顶点的法线
+
+    void diffuseShader()
+    {
+        vec3 kd;
+        kd = texture2d(myTexture, uv);                      // 材质颜色
+        kd *= clamp(dot(-lightDir, norm), 0.0, 1.0);        // l和n的方向点乘
+        gl_FragColor = vec4(kd, 1.0);                       // 存储像素或者片段的颜色
+    }
+    ```
+- GPU和管线（了解，随手一记）
+    - GPU会完成很多图形的映射什么的
+    - GPU有很高很高的并行量，适合用于图形的计算
+
+### 纹理映射
+- 定义
+    - 定义物理表面任何一个点的不同属性
+    - 任何一个三维物体表面都是二维的
+    - 将纹理拉伸，压缩变换，使得三维物体表面映射到二维纹理上
+- 例子
+    <img src="./image/texture.png" alt="纹理例子" width="600px"></img>
+- uv展开
+    - 无论展开什么图形，一般认为u在0-1内，v在0-1内
+    - 三角形三个顶点，每个顶点都对应一个uv坐标
+    <img src="./image/uv.png" alt="uv展开" width="600px"></img>
+- 设计纹理（扩展）
+    - 设计重复纹理，上下左右衔接无缝（tiled textures）
+        - 其中一种算法：wang tiled
+- 如何知道三角形每块对应的坐标
+   - 重心坐标差值，下次一定
+    
+
+
+
