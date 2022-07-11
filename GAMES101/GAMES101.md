@@ -521,7 +521,27 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         - 其中一种算法：wang tiled
 - 如何知道三角形每块对应的坐标
    - 重心坐标差值，下次一定
-    
+
+### 重心坐标
+- 定义
+    - 知道一个三角形的三个顶点，三角形的这个平面上的任何一个点都可以被表示成这三个点的线性组合
+    <img src="./image/barycentric.png" alt="重心坐标" width="200px"></img>
+    - $(x, y) = \alpha A+\beta B+\gamma C$
+    $\qquad\qquad \alpha+\beta+\gamma=1$
+    - 这三个点如果都是非负的，那这个点一定在三角形内
+    - $\alpha = \frac{A_A}{A_A+A_B+A+C}$ 
+      $\beta = \frac{A_B}{A_A+A_B+A+C}$ 
+      $\gamma = \frac{A_C}{A_A+A_B+A+C}$ 
+    <img src="./image/barycentric1.png" alt="重心坐标" width="200px"></img>
+- 用途
+    - 对于三角形内任意一个点，进行差值
+        - 颜色
+        - 深度
+        - 法线
+        - 等等
+- 注意
+    - 投影后的三角形重心坐标与原本并不相同
+    - 所以应该先做差值后做投影（三维空间做差值对应到二维上）
 
 
 
