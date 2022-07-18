@@ -317,9 +317,9 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         - 原图：
         <img src="./image/filter1.png" alt="原图" width="200px"></img>
         - 滤掉高频（Egdes）：
-        <img src="./image/filter2.png" alt="滤掉高频" width="200px"></img>
+        <img src="./image/filter3.png" alt="滤掉高频" width="200px"></img>
         - 滤掉低频（blur）：
-        <img src="./image/filter3.png" alt="滤掉低频" width="200px"></img>
+        <img src="./image/filter2.png" alt="滤掉低频" width="200px"></img>
         - 滤掉高频与低频：
         <img src="./image/filter4.png" alt="滤掉高频与低频" width="200px"></img>
         <img src="./image/filter5.png" alt="滤掉高频与低频" width="200px"></img>
@@ -520,7 +520,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 设计重复纹理，上下左右衔接无缝（tiled textures）
         - 其中一种算法：wang tiled
 - 如何知道三角形每块对应的坐标
-   - 重心坐标差值，下次一定
+   - 重心坐标插值，下次一定
 
 ### 重心坐标
 - 定义
@@ -534,11 +534,12 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
       $\gamma = \frac{A_C}{A_A+A_B+A+C}$ 
     <img src="./image/barycentric1.png" alt="重心坐标" width="200px"></img>
 - 用途
-    - 对于三角形内任意一个点，进行差值
+    - 对于三角形内任意一个点，进行插值
         - 颜色
         - 深度
         - 法线
         - 等等
+    <img src="./image/barycentric_color.png" alt="重心坐标插值颜色" width="200px"></img>
 - 注意
     - 投影后的三角形重心坐标与原本并不相同
     - 所以应该先做差值后做投影（三维空间做差值对应到二维上）
