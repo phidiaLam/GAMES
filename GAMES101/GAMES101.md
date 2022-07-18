@@ -542,7 +542,24 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     <img src="./image/barycentric_color.png" alt="重心坐标插值颜色" width="200px"></img>
 - 注意
     - 投影后的三角形重心坐标与原本并不相同
-    - 所以应该先做差值后做投影（三维空间做差值对应到二维上）
-
-
+    - 所以应该先做插值后做投影（三维空间做插值对应到二维上）
+- 纹理插值
+    - 在纹理映射的时候，用重心坐标算出uv，就可以将纹理贴到平面上。
+    - 但是这样子做会出问题
+        1. 纹理放大
+            - texture： 纹理像素
+              texel：映射后的像素
+            - 描述：一堵墙有4k的分辨率，但是纹理只有256*256，这样子就会查到非整数的值
+            
+            - 解决
+                - Nearest： 将映射的非整数值四舍五入成整数
+                - Bilinear（双线性插值）
+                    - 找到距离左下角的横向和竖直距离
+                    - $lerp(x, v_0, v_1)=v_0+x(v_1-v_0)$ [一维]线性插值（Linear interplation）
+                    - $u_0=lerp(s,u_{00},u_{10})$
+                      $u_1=lerp(s,u_{01},u_{11})$
+                    - $f(x,y)=lerp(t,u_0,u_1)$
+                - Bicubic：Bilinear是取周围4个点插值，Bicubic是取16个点
+            <img src="./image/texel.png" alt="重心坐标" width="600px"></img>
+        2. 纹理过大
 
