@@ -562,4 +562,19 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
                 - Bicubic：Bilinear是取周围4个点插值，Bicubic是取16个点
             <img src="./image/texel.png" alt="重心坐标" width="600px"></img>
         2. 纹理过大
+            - 问题：纹理过大因为多个像素要被缩小成一个像素，就会导致走样，走样可能比纹理放大时还严重
+            <img src="./image/texture_large.png" alt="重心坐标" width="400px"></img>
+            - Mipmap（图像金字塔）
+                - 特点：快速，大约，只能做近似正方形
+                - 提前生成多张图，以便快速查询
+                <img src="./image/mipmap.png" alt="mipmap" width="600px"></img>
+                只需要$\frac{4}{3}$的空间就可以储存所有的mipmap
+                - 映射
+                    - 通过求纹理uv图两个临近点的距离，从而求出一个像素覆盖的区域长度（简单起见取最大的）
+                    <img src="./image/uv_mipmap.png" alt="纹理映射uv" width="500px"></img>
+                    $D=log_2L$
+                    $L=max(\sqrt{(\frac{du}{dx})^2+(\frac{dv}{dx})^2}\cdot \sqrt{(\frac{du}{dy})^2+(\frac{dv}{dy})^2}$
+                    - 问题：变化不连续，很奇怪
+                    <img src="./image/mipmap_example.png" alt="变化不连续的示例" width="500px"></img>
+
 
