@@ -576,5 +576,14 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
                     $L=max(\sqrt{(\frac{du}{dx})^2+(\frac{dv}{dx})^2}\cdot \sqrt{(\frac{du}{dy})^2+(\frac{dv}{dy})^2}$
                     - 问题：变化不连续，很奇怪
                     <img src="./image/mipmap_example.png" alt="变化不连续的示例" width="500px"></img>
-
+                    - 三线型插值（Trilinear Interpolation）：选取两个相邻的金字塔level，在完成两个层级中的双线性插值后，在两层级间再进行一次插值。
+                    <img src="./image/trilinear.png" alt="三线型插值" width="600px"></img>
+                    <img src="./image/trilinear_example.png" alt="三线型插值成果" width="500px"></img>
+            - 过模糊
+                - 就算使用了mipmap，还会出现过模糊的问题
+                <img src="./image/overblur.png" alt="三线型插值成果" width="400px"></img>
+                - 因为图像上的方形区域并不对应纹理上的方形区域
+                <img src="./image/texture_square.png" alt="三线型插值成果" width="400px"></img>
+            - 各向异性过滤(Anisotropic Filtering)
+                - 
 
