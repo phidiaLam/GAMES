@@ -585,5 +585,10 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
                 - 因为图像上的方形区域并不对应纹理上的方形区域
                 <img src="./image/texture_square.png" alt="三线型插值成果" width="400px"></img>
             - 各向异性过滤(Anisotropic Filtering)
-                - 
+                - 生成原本四倍储存大小的map图片，方便用于查询不同长宽比的对应纹理图
+                <img src="./image/anisotropic.png" alt="各向异性过滤" width="400px"></img>
+            - EWA滤波
+                1. 将不规则的图形用圆分割
+                2. 然后反复查询
+                - 缺点：因为需要反复查询，所耗资源较大
 
