@@ -592,3 +592,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
                 2. 然后反复查询
                 - 缺点：因为需要反复查询，所耗资源较大
 
+## 几何学
+### 介绍
+- 
+
