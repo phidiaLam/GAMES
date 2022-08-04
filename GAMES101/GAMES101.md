@@ -591,8 +591,21 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
                 1. 将不规则的图形用圆分割
                 2. 然后反复查询
                 - 缺点：因为需要反复查询，所耗资源较大
+### 总结
+- 现代GPU，纹理可以理解成有一块内存（数据），可以在这个范围内进行点查询或者范围查询（如：mipmap）
+- 纹理能做的：
+    按顺序来看一步一步来
+    - 环境映射（Environment Map）：
+    存储周围环境到一张图里面
+     <img src="./image/environment_map.png" alt="环境映射" width="400px"></img>
+     （犹他茶壶）
+    - 环境光
+    环境光来自无限远，映射出一个四面八方的环境
+    <img src="./image/environment_light.png" alt="环境光" width="400px"></img>
+
+
 
 ## 几何学
 ### 介绍
-- 
+
 
