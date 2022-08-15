@@ -593,7 +593,7 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
                 - 缺点：因为需要反复查询，所耗资源较大
 ### 纹理应用
 - 现代GPU，纹理可以理解成有一块内存（数据），可以在这个范围内进行点查询或者范围查询（如：mipmap）
-- 应用纹理：
+- 纹理的应用：
     - 环境映射（Environment Map）：
         存储周围环境到一张图里面
         <img src="./image/environment_map.png" alt="环境映射" width="400px"></img>
@@ -607,10 +607,14 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         - 问题： 会导致上下扭曲严重
     - 立方体贴图（Cube Map）
         将贴图折叠成六个面，将它映射于球体上
-        <img src="./image/cube_map.png" alt="球面环境映射" width="400px"></img>
-        
-
-
+        <img src="./image/cube_map.png" alt="立方体贴图" width="400px"></img>
+    - 纹理影响法线
+        - 通过纹理来储存法线信息生成阴影
+            <img src="./image/bump_texture.png" alt="凹凸贴图" width="400px"></img>
+        - 计算高度偏移量计算法线，重新计算明暗
+            <img src="./image/bump_mapping.png" alt="凹凸贴图映射" width="400px"></img>
+        - 缺点：无法造成阴影映射到其他物体上
+            <img src="./image/bump.png" alt="其他物体没有阴影" width="400px"></img>
 
 ## 几何学
 ### 介绍
