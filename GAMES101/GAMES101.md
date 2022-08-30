@@ -615,6 +615,10 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
             <img src="./image/bump_mapping.png" alt="凹凸贴图映射" width="400px"></img>
         - 缺点：无法造成阴影映射到其他物体上
             <img src="./image/bump.png" alt="其他物体没有阴影" width="400px"></img>
+    - 纹理影响高度
+        - 通过纹理来储存高度信息，影响每个点
+            <img src="./image/displacement_mapping.png" alt="影响高度有阴影" width="400px"></img>
+        
 
 ## 几何学
 ### 介绍
