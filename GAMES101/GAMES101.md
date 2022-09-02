@@ -612,10 +612,25 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
         - 通过纹理来储存法线信息生成阴影
             <img src="./image/bump_texture.png" alt="凹凸贴图" width="400px"></img>
         - 计算高度偏移量计算法线，重新计算明暗
+            定义每个像素高度相对位置的移动，从而计算法线
             <img src="./image/bump_mapping.png" alt="凹凸贴图映射" width="400px"></img>
+        - 计算：
+            - 二维
+                原法线： $n(p) = (0,1)$
+                求导p位置的变化： $dp = c * [h(p+1)- h(p)]$ 
+                新法线： $n(p) = $n(p) = (-dp, 1).normalized()$
+                (90度旋转，xy调换，x乘-1)
+                <img src="./image/comp_bump_mapping.png" alt="计算凹凸贴图" width="400px"></img>
+            - 三维
+                原法线：$n(p) = (0,0,1)$
+                求导p位置的变化：
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\frac{dp}{du} = c1 * [h(u+1)- h(u)]$ 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\frac{dp}{dv} = c2 * [h(v+1)- h(v)]$ 
+                新法线： $n=(-\frac{dp}{du}, -\frac{dp}{dv} 1).normalized()$
+            - 注意：可以定义局部坐标系，认为法线永远向上，如(0，0，1)。通过纹理贴图映射
         - 缺点：无法造成阴影映射到其他物体上
             <img src="./image/bump.png" alt="其他物体没有阴影" width="400px"></img>
-    - 纹理影响高度
+    - 位移贴图
         - 通过纹理来储存高度信息，影响每个点
             <img src="./image/displacement_mapping.png" alt="影响高度有阴影" width="400px"></img>
         
