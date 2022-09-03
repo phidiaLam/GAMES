@@ -633,7 +633,10 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
     - 位移贴图
         - 通过纹理来储存高度信息，影响每个点
             <img src="./image/displacement_mapping.png" alt="影响高度有阴影" width="400px"></img>
-        
+    - 纹理的其他作用
+        - 储存三维的信息，如用于医疗扫描等等
+        - 预先储存环境光信息，对凹陷阴影处理更好，加载速度更快等等
+        - 纹理可以用于代表很多东西
 
 ## 几何学
 ### 介绍
