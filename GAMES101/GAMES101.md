@@ -642,3 +642,8 @@ $A = \begin{pmatrix} x\\ y\\ \end{pmatrix}$  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 ### 介绍
 
 
+### 分类
+- 隐式几何
+
+- 显式几何
+
