@@ -678,4 +678,10 @@
   - 缺点：很难判断一个点与表面的关系
   - 优点：根据公式可以轻松画出图形
 
-### 隐式几何
+### 隐式几何表示方法
+- 代数方法（Algebraic Surfaces）
+  - 很难通过代数知道图形是什么，也很难将一个几何写成一个代数公式
+  <img src="./image/algebraic_surfaces.png" alt="代数表面" width="400px"></img>
+- CSG（Constructive Solid Geometry）
+  - 通过基本几何的布尔计算
+  <img src="./image/csg.png" alt="图形布尔" width="600px"></img>
