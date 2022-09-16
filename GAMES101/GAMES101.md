@@ -685,3 +685,49 @@
 - CSG（Constructive Solid Geometry）
   - 通过基本几何的布尔计算
   <img src="./image/csg.png" alt="图形布尔" width="600px"></img>
+- 距离函数（Distance Functions）
+  - 定义
+    - 空间中一个点到你要表述的几何形体的最小距离
+    - 这个距离可以是正的也可以是负的，一个点在物体外部则为正，一个点在物体内部则为负数
+    <img src="./image/distance_function.png" alt="距离函数" width="800px"></img>
+  - 例子
+    - 例子1:
+      - 希望将两张图片混合后得到一个均匀过渡左黑右白的图
+      <img src="./image/distance_example.png" alt="距离函数例子" width="400px"></img>
+      - （SDF的S表示sin）
+      - 上面的是通过简单的叠加，并不能达到我们想要的效果
+      - 下图则通过距离函数奖两图加起来，则可以得到均匀过渡
+    - 例子2:
+      - 通过距离函数就可以混合两个形状一起
+      <img src="./image/distance_sharp_example.png" alt="距离函数例子" width="800px"></img>
+    - 还可以做很多很多复杂的模型
+  - 获取表面
+    - 代数展示距离公式：知道了一个距离函数，通过将0找出来，就可以获得这个距离函数的表面
+    - 水平集展示距离公式（Level Set Methods）：
+      - 封闭式的方程很难描述复杂的形状，使用近似于函数的网络进行替代
+      <img src="./image/level_set_methods.png" alt="水平集" width="400px"></img>
+    - 应用
+      - 可以用于医学3d实心建模
+      - 水滴滴落，水花四溅的效果
+- 分形（Fractals）
+  - 分形容易走样，之后渲染有很大挑战
+  <img src="./image/fractals.png" alt="分形例子" width="800px"></img>
+
+### 显式几何表示方式
+- 点云（Point Cloud）
+  - 通过极其密的点来表示平面，只要点足够密，看起来就是一个平面
+  - 应用：
+    - 三维空间的扫描
+  - 问题：
+    - 如何从点云转换成面
+- 多边形面（Polygon Mesh）
+  - 将几何平面拆成一个个小多边形
+  - 问题：
+    - 连接关系：如何连接点形成三角形
+  - 储存方法：
+    - wavefront object file(.obj)
+      - 
+
+- 贝塞尔面
+- 细分面 
+
