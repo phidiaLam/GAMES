@@ -748,7 +748,7 @@
       - 满足杨辉三角形
     - 伯恩斯坦表示
       - $b^n(t)=b_{0}^n(t)=\sum_{j=0}^nb_jB_{j}^n(t)$
-      - 伯恩斯坦多项式：$B_{i}^n(t)= \begin{pmatrix} n\\ i\\ \end{pmatrix}t^i(1-t)^{n-i}$
+      - 伯恩斯坦多项式：$B_{i}^n(t)= \begin{pmatrix} n\\ i\\ \end{pmatrix}t^i(1-t)^{n-i}$ ($\begin{pmatrix} n\\ i\\ \end{pmatrix}$ 是$C_i^n$)
 
 - 细分面 
 
