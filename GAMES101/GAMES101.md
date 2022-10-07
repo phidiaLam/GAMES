@@ -749,6 +749,14 @@
     - 伯恩斯坦表示
       - $b^n(t)=b_{0}^n(t)=\sum_{j=0}^nb_jB_{j}^n(t)$
       - 伯恩斯坦多项式：$B_{i}^n(t)= \begin{pmatrix} n\\ i\\ \end{pmatrix}t^i(1-t)^{n-i}$ ($\begin{pmatrix} n\\ i\\ \end{pmatrix}$ 是$C_i^n$)
-
+  - 特性：
+    - 凸包性质：多个点画出的贝塞尔曲线一定是在这几个点生成的凸包内
+     <img src="./image/convex_hull.png" alt="凸包" width="400px"></img>
+  - 优化：
+    - 如上图，多个点很难画出一个完整的贝塞尔曲线。
+    - 一半将其分成每四个控制点来定义一条贝塞尔曲线，再将多个贝塞尔曲线连起来。
+    - 中间的点一般不画出来
+     <img src="./image/piecewise_bezier.png" alt="分段贝塞尔曲线" width="600px"></img>
+    - 为了确保两条曲线之间光滑过度，可以将一个两边的控制点共线，距离相等
 - 细分面 
 
