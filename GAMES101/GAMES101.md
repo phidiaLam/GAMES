@@ -758,5 +758,12 @@
     - 中间的点一般不画出来
      <img src="./image/piecewise_bezier.png" alt="分段贝塞尔曲线" width="600px"></img>
     - 为了确保两条曲线之间光滑过度，可以将一个两边的控制点共线，距离相等
+  - $C^0$连续
+    - 几何上的连续（首位点相接）
+    - $a_n=b_0$
+  - $C^1$连续
+    - 切线上的连续
+    - $a_n=b_0=\frac{1}{2}(a_{n-1}+b_1)$
+    <img src="./image/c1_continuity.png" alt="c1连续" width="600px"></img>
 - 细分面 
 
