@@ -565,7 +565,7 @@
          texel：映射后的像素
        - 描述：一堵墙有 4k 的分辨率，但是纹理只有 256\*256，这样子就会查到非整数的值
 
-       - 解决 - Nearest： 将映射的非整数值四舍五入成整数 - Bilinear（双线性插值） - 找到距离左下角的横向和竖直距离 - $lerp(x, v_0, v_1)=v_0+x(v_1-v_0)$ [一维]线性插值（Linear interplation） - $u_0=lerp(s,u_{00},u_{10})$
+       - 解决 - Nearest： 将映射的非整数值四舍五入成整数 - Bilinear（双线性插值） - 找到距离左下角的横向和竖直距离 - $lerp(x, v_0, v_1)=v_0+x(v_1-v_0)$ [一维]线性插值（Linear interpolation） - $u_0=lerp(s,u_{00},u_{10})$
          $u_1=lerp(s,u_{01},u_{11})$ - $f(x,y)=lerp(t,u_0,u_1)$ - Bicubic：Bilinear 是取周围 4 个点插值，Bicubic 是取 16 个点
          <img src="./image/texel.png" alt="重心坐标" width="600px"></img>
 
@@ -765,5 +765,25 @@
     - 切线上的连续
     - $a_n=b_0=\frac{1}{2}(a_{n-1}+b_1)$
     <img src="./image/c1_continuity.png" alt="c1连续" width="600px"></img>
-- 细分面 
+  - 其他曲线
+    - 样条（Splines）
+      - 连续的曲线，是由一些控制点决定的，在任意一个点都满足一定的连续性
+      - B-样条（基函数样条）
+        - 贝塞尔曲线的扩展，能力更强：贝塞尔曲线懂一个点，整条曲线都会有变化
+        - B样条拥有局部性，改变一个点只会改变局部的曲线
+        - 图形学里面一个很难的部分（之后学），还有个更复杂的NURBS[非均匀有理样条]
+          - 网址：https://www.bilibili.com/video/av66548502?from=search&seid=65256805876131485
+- 曲面
+  - 贝塞尔曲面
+    - 16个控制点，形成多条贝塞尔曲线进行线性插值
+    - 两个时间，一个横向的u和一个纵向的v
+    - 过程：
+      1. 通过时间u来计算横向的四条曲线上的点
+      2. 通过时间v与第一步的四个点，来找出当前u与v时间下所对应的点
+       <img src="./image/bezier_curve.png" alt="贝塞尔曲面" width="600px"></img>
+  - 网格操作：几何处理
+    - 网格细化
+    - 网格简化
+    - 网格规整化
+    <img src="./image/mesh_operation.png" alt="几何网格操作" width="800px"></img>
 
