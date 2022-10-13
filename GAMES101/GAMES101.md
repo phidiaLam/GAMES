@@ -799,7 +799,8 @@
     <img src="./image/split_triangle.png" alt="分割三角形" width="400px"></img>
     - 更新点位置
       - 三角形边上的点：
-
+        <img src="./image/loop_update_edge.png" alt="三角形位置调整（边）" width="400px"></img>
       - 三角形顶点上的点：
+      <img src="./image/loop_update_vertex.png" alt="三角形位置调整（顶点）" width="400px"></img>
   
 
