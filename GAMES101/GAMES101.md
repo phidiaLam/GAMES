@@ -801,6 +801,12 @@
       - 三角形边上的点：
         <img src="./image/loop_update_edge.png" alt="三角形位置调整（边）" width="400px"></img>
       - 三角形顶点上的点：
-      <img src="./image/loop_update_vertex.png" alt="三角形位置调整（顶点）" width="400px"></img>
-  
-
+        <img src="./image/loop_update_vertex.png" alt="三角形位置调整（顶点）" width="400px"></img>
+  - Catmull-Clark细分
+    - 为什么有loop细分还不够？
+        - Loop细分只能支持三角形网格
+    - 定义：
+      - 非四边形面：不是四边形的面
+      - 奇异点（极点）：度不为4的点
+      <img src="./image/catmull_clark_subdivision.png" alt="Catmull-Clark细分定义" width="400px"></img>
+     
