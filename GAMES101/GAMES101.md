@@ -808,5 +808,12 @@
     - 定义：
       - 非四边形面：不是四边形的面
       - 奇异点（极点）：度不为4的点
-      <img src="./image/catmull_clark_subdivision.png" alt="Catmull-Clark细分定义" width="400px"></img>
+      <img src="./image/catmull_clark_subdivision1.png" alt="Catmull-Clark细分定义" width="400px"></img>
+    - 变化过程
+      1. 连接每个四方形对边的中点
+      2. 非四边形面，每个边中点连至重心，将非四边形划分成多个四边形
+      <img src="./image/catmull_clark_subdivision2.png" alt="Catmull-Clark细分定义" width="400px"></img>
+      3. 不断重复步骤1，使得其被分割成更多的四边形，看起来跟顺滑
+      <img src="./image/catmull_clark_subdivision3.png" alt="Catmull-Clark细分定义" width="400px"></img>
+      <img src="./image/catmull_clark_subdivision4.png" alt="Catmull-Clark细分定义" width="400px"></img>
      
