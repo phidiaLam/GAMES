@@ -280,6 +280,10 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
             float zp = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
             zp *= Z;
 
+            int buf_index = get_index(x,y);
+            if (zp >= depth_buf[buf_index]) continue;
+            depth_buf[buf_index] = zp;
+
             // TODO: Interpolate the attributes:
             auto interpolated_color = interpolate(alpha, beta, gamma, t.color[0], t.color[1], t.color[2], 1.0);
             auto interpolated_normal = interpolate(alpha, beta, gamma, t.normal[0], t.normal[1], t.normal[2], 1.0);
