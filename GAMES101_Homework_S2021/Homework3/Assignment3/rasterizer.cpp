@@ -264,9 +264,9 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
     float bound_x_max = std::max(std::max(v[0].x(), v[1].x()), v[2].x());
     float bound_y_max = std::max(std::max(v[0].y(), v[1].y()), v[2].y());
 
-    for (float x = bound_x_min; x <= bound_x_max; x++)
+    for (int x = (int)bound_x_min; x <= (int)bound_x_max; x++)
     {
-        for (float y = bound_y_min; y <= bound_y_max; y++)
+        for (int y = (int)bound_y_min;y <= (int)bound_y_max; y++)
         {
             if (!insideTriangle(x, y, t.v))
                 continue;
