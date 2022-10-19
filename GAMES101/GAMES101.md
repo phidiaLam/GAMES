@@ -628,7 +628,7 @@
       - 二维
         原法线： $n(p) = (0,1)$
         求导 p 位置的变化： $dp = c * [h(p+1)- h(p)]$
-        新法线： $n(p) = $n(p) = (-dp, 1).normalized()$
+        新法线： $n(p) = (-dp, 1).normalized()$
         (90 度旋转，xy 调换，x 乘-1)
         <img src="./image/comp_bump_mapping.png" alt="计算凹凸贴图" width="400px"></img>
       - 三维
@@ -636,7 +636,7 @@
         求导 p 位置的变化：
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\frac{dp}{du} = c1 * [h(u+1)- h(u)]$
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\frac{dp}{dv} = c2 * [h(v+1)- h(v)]$
-        新法线： $n=(-\frac{dp}{du}, -\frac{dp}{dv} 1).normalized()$
+        新法线： $n=(-\frac{dp}{du}, -\frac{dp}{dv}, 1).normalized()$
       - 注意：可以定义局部坐标系，认为法线永远向上，如(0，0，1)。通过纹理贴图映射
     - 缺点：无法造成阴影映射到其他物体上
       <img src="./image/bump.png" alt="其他物体没有阴影" width="400px"></img>
