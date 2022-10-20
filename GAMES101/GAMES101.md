@@ -786,8 +786,8 @@
 
 ### 网格
 - 网格操作：几何处理
-  - 网格细化
-  - 网格简化
+  - 网格细化 (Mesh Subdivision)
+  - 网格简化 (Mesh Simplification)
   - 网格规整化
   <img src="./image/mesh_operation.png" alt="几何网格操作" width="800px"></img>
 - 网格细分
@@ -816,4 +816,53 @@
       3. 不断重复步骤1，使得其被分割成更多的四边形，看起来跟顺滑
       <img src="./image/catmull_clark_subdivision3.png" alt="Catmull-Clark细分定义" width="400px"></img>
       <img src="./image/catmull_clark_subdivision4.png" alt="Catmull-Clark细分定义" width="400px"></img>
-     
+    - 计算公式（调整点的位置）：
+      - 面中心的点：$f = \frac{v_1+v_2+v_3+v_4}{4}$
+        <img src="./image/face_point_change.png" alt="变化面上的点" width="150px"></img>
+      - 边中心的点：$e = \frac{v_1+v_2+f_1+f_2}{4}$
+        <img src="./image/edge_point_change.png" alt="变化边上的点" width="150px"></img>
+      - 定点上的点(老的顶点)： $e = \frac{f_1+f_2+f_3+f_4+2(m_1+m_2+m_3+m_4)+4p}{16}$
+        <img src="./image/old_point_change.png" alt="变化顶点上的点" width="150px"></img>
+- 网格简化
+  - 简化模型可以用于提升性能，比如游戏渲染等，不同场合用不同复杂度的模型
+  <img src="./image/mesh_simplification_example.png" alt="简化模型例子" width="400px"></img>
+  - 边坍缩（edge collapsing）
+    - 定义：边坍缩算法是一个迭代算法，通过不断迭代进行边坍缩操作达到简化模型的目的。
+       <img src="./image/edge_collapsing_example.png" alt="边坍缩例子" width="400px"></img>
+    - 二次误差度量（Quadric Error Metrics）
+      - 目的：那些边重要不能捏一块，那些边不重要能捏一块
+      - 二次误差意思不是做两次，是平方的意思
+      - 二次误差：新的点满足到原本各个相关面的平方和最小
+      <img src="./image/quadric_error.png" alt="二次误差" width="400px"></img>
+      - 计算过程（如何选边）
+        - 计算到表面的近似距离作为到包含三角形的平面的距离之和
+        - 通过堆或者优先队列为上诉计算得到的分数进行排序
+        - 从最小的分数开始边坍缩
+        - 利用贪心算法做局部最优解
+
+## 阴影（光线追踪准备）
+  - 阴影贴图（shadow mapping）
+    - 图像空间算法
+      - 生成阴影不需要知道场景的集合信息
+      - 会产生走样现象
+    - 重要思想
+      - 点不在阴影里，摄像机和光源都可以看到这个点
+      - 点在阴影里，摄像机可以看到，光源则看不到这个点
+  - 硬阴影
+    - 定义：一个点只有在阴影内或阴影外，非0即1
+    - 点光源
+      1. 从光源处计算深度缓存
+       <img src="./image/render_light1.png" alt="光源深度缓存" width="150px"></img>
+      2. 从相机处观察能看到的点，然后投影回去光源的成像平面上，对比两个深度判断是否在阴影内
+       <img src="./image/render_light2.png" alt="摄像机深度映射" width="150px"></img><img src="./image/render_light3.png" alt="摄像机深度映射" width="200px"></img>
+    - 问题：
+      - 两次渲染开销大
+      - 浮点数精度问题，导致深度对比不准确
+      - shadow map的分辨率问题
+  - 硬阴影 vs. 软阴影
+      - 图例：
+        <img src="./image/hard_shadow.png" alt="硬阴影" width="198px"></img><img src="./image/soft_shadow.png" alt="软阴影" width="200px"></img>
+      - 软阴影是因为自然界光有一定体积，这是基于自然规律
+        - 被完全挡住的称为本影（umbra）
+        <img src="./image/eclipse_sun.png" alt="日食" width="300px"></img>
+        - 被挡住一般的称为半影（penumbra）
