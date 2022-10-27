@@ -786,8 +786,8 @@
 
 ### 网格
 - 网格操作：几何处理
-  - 网格细化
-  - 网格简化
+  - 网格细化 (Mesh Subdivision)
+  - 网格简化 (Mesh Simplification)
   - 网格规整化
   <img src="./image/mesh_operation.png" alt="几何网格操作" width="800px"></img>
 - 网格细分
@@ -823,5 +823,16 @@
         <img src="./image/edge_point_change.png" alt="变化边上的点" width="150px"></img>
       - 定点上的点(老的顶点)： $e = \frac{f_1+f_2+f_3+f_4+2(m_1+m_2+m_3+m_4)+4p}{16}$
         <img src="./image/old_point_change.png" alt="变化顶点上的点" width="150px"></img>
+- 网格简化
+  - 简化模型可以用于提升性能，比如游戏渲染等，不同场合用不同复杂度的模型
+  <img src="./image/mesh_simplification_example.png" alt="简化模型例子" width="400px"></img>
+  - 边坍缩（edge collapsing）
+    - 定义：边坍缩算法是一个迭代算法，通过不断迭代进行边坍缩操作达到简化模型的目的。
+       <img src="./image/edge_collapsing_example.png" alt="边坍缩例子" width="400px"></img>
+    - 二次误差度量（Quadric Error Metrics）
+      - 目的：那些边重要不能捏一块，那些边不重要能捏一块
+      - 二次误差意思不是做两次，是平方的意思
+      - 
+
 
      
