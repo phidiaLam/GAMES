@@ -816,4 +816,12 @@
       3. 不断重复步骤1，使得其被分割成更多的四边形，看起来跟顺滑
       <img src="./image/catmull_clark_subdivision3.png" alt="Catmull-Clark细分定义" width="400px"></img>
       <img src="./image/catmull_clark_subdivision4.png" alt="Catmull-Clark细分定义" width="400px"></img>
+    - 计算公式（调整点的位置）：
+      - 面中心的点：$f = \frac{v_1+v_2+v_3+v_4}{4}$
+        <img src="./image/face_point_change.png" alt="变化面上的点" width="150px"></img>
+      - 边中心的点：$e = \frac{v_1+v_2+f_1+f_2}{4}$
+        <img src="./image/edge_point_change.png" alt="变化边上的点" width="150px"></img>
+      - 定点上的点(老的顶点)： $e = \frac{f_1+f_2+f_3+f_4+2(m_1+m_2+m_3+m_4)+4p}{16}$
+        <img src="./image/old_point_change.png" alt="变化顶点上的点" width="150px"></img>
+
      
