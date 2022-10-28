@@ -840,4 +840,29 @@
         - 从最小的分数开始边坍缩
         - 利用贪心算法做局部最优解
 
-     
+## 阴影（光线追踪准备）
+  - 阴影贴图（shadow mapping）
+    - 图像空间算法
+      - 生成阴影不需要知道场景的集合信息
+      - 会产生走样现象
+    - 重要思想
+      - 点不在阴影里，摄像机和光源都可以看到这个点
+      - 点在阴影里，摄像机可以看到，光源则看不到这个点
+  - 硬阴影
+    - 定义：一个点只有在阴影内或阴影外，非0即1
+    - 点光源
+      1. 从光源处计算深度缓存
+       <img src="./image/render_light1.png" alt="光源深度缓存" width="150px"></img>
+      2. 从相机处观察能看到的点，然后投影回去光源的成像平面上，对比两个深度判断是否在阴影内
+       <img src="./image/render_light2.png" alt="摄像机深度映射" width="150px"></img><img src="./image/render_light3.png" alt="摄像机深度映射" width="200px"></img>
+    - 问题：
+      - 两次渲染开销大
+      - 浮点数精度问题，导致深度对比不准确
+      - shadow map的分辨率问题
+  - 硬阴影 vs. 软阴影
+      - 图例：
+        <img src="./image/hard_shadow.png" alt="硬阴影" width="198px"></img><img src="./image/soft_shadow.png" alt="软阴影" width="200px"></img>
+      - 软阴影是因为自然界光有一定体积，这是基于自然规律
+        - 被完全挡住的称为本影（umbra）
+        <img src="./image/eclipse_sun.png" alt="日食" width="300px"></img>
+        - 被挡住一般的称为半影（penumbra）
