@@ -883,3 +883,51 @@
   - 定义：假设成像平面上的每个像素与摄像机连一根线，这个线打到场景的某个位置，判定这个点是不是对光源可见，有多少能量。
   <img src="./image/ray_casting.png" alt="光线投影" width="400px"></img>
   - 弊端：光线会做多次反射折射
+- 递归光线追踪 Whitted-Style
+  - 过程
+    - 计算从眼睛出来的光线的折射与反射，以及他们对应的能量
+    - 在每一个弹射的点，与光源做一条连线，计算这些弹射的点着色的值，并把它们加起来。要包括能量损失。
+    <img src="./image/whitted_style.png" alt="whitted光线追踪" width="600px"></img>
+    - 专有名词：
+      1. primary ray：射线从眼睛到物体
+      2. secondary rays：经过物体后反射或折射后的射线
+      3. shadow rays：从作色点到光源判定可见性的点
+  - 焦点
+    - 射线（ray）
+      - 定义：一个起点与一个方向
+      - 图例：<img src="./image/ray_equation.png" alt="光线公式" width="300px"></img>
+      - 公式：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\leq t \lt\infty$
+        任何光线上的点都可以用这个公式表示
+    - 射线与球的焦点
+      - 光线：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\leq t \lt\infty$
+      - 球（隐式表示）：$p:(p-c)^2-R^2=0$
+      - 焦点：$(o+td-c)^2-R^2=0$
+      - 计算：$at^2+bt+c=0$ where 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $a=d \times d$
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $b=2(o-c) \times d$
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $c=(o-c) \times (o-c) - R^2$
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$
+      根据$b^2-4ac$与0的关系则可判断射线与球的相交、相切、相离关系
+      后计算较小的t则为光线与球的焦点
+    - 射线与隐式表面的焦点
+      - 光线：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\lt t \lt\infty$
+      - 一般隐式表面：$p:f(p)=0$
+      - 焦点：$f(o+td)=0$
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t解出来一定要是实数、正数
+    - 射线与三角形网格的焦点
+      - 用处：
+        - 判断光线是否可见，阴影等
+        - 判断一个点是否在物体内。一个点如果在物体内随便作一条射线，那它的焦点一定是奇数
+      - 如何计算场景物体与光线的焦点：
+        - 计算每根射线与每个三角形的焦点
+        - 缺点：计算量大，后期说优化
+      - 求光线和三角形焦点：
+        - 过程
+          1. 光线和平面求焦点
+          2. 判断焦点是否在三角形内
+        - 平面定义
+          - 定义一个法线与一个点
+          <img src="./image/plane_def.png" alt="定义平面" width="300px"></img>
+          - 公式：$p:(p-p') \cdot N = 0$ 将点展开成xyz可得 $ax+by+cz+d=0$
+        - 焦点：$(p-p') \cdot N = (o+td-p') \cdot N = 0$
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{(p'-o)\cdot N}{d\cdot N}$ Where $0\leq t \lt\infty$
