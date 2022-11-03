@@ -922,12 +922,27 @@
         - 计算每根射线与每个三角形的焦点
         - 缺点：计算量大，后期说优化
       - 求光线和三角形焦点：
-        - 过程
-          1. 光线和平面求焦点
-          2. 判断焦点是否在三角形内
-        - 平面定义
-          - 定义一个法线与一个点
-          <img src="./image/plane_def.png" alt="定义平面" width="300px"></img>
-          - 公式：$p:(p-p') \cdot N = 0$ 将点展开成xyz可得 $ax+by+cz+d=0$
-        - 焦点：$(p-p') \cdot N = (o+td-p') \cdot N = 0$
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{(p'-o)\cdot N}{d\cdot N}$ Where $0\leq t \lt\infty$
+        1. 第一种方法
+          - 过程
+            1. 光线和平面求焦点
+            2. 判断焦点是否在三角形内
+          - 平面定义
+            - 定义一个法线与一个点
+            <img src="./image/plane_def.png" alt="定义平面" width="300px"></img>
+            - 公式：$p:(p-p') \cdot N = 0$ 将点展开成xyz可得 $ax+by+cz+d=0$
+          - 焦点：$(p-p') \cdot N = (o+td-p') \cdot N = 0$
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{(p'-o)\cdot N}{d\cdot N}$ Where $0\leq t \lt\infty$
+        2. 第二种方法(Moller Trumbore算法)
+          - 公式：$\vec{O}+t\vec{D}=(1-b_1-b_2)\vec{P_0}+b_1\vec{P_1}+b_2\vec{P_2}$ 后半部分为重心坐标
+          - 转换：$\begin{bmatrix} t\\b_1\\b_2 \end{bmatrix}=\frac{1}{\vec{S_1}\cdot\vec{E_1}}\begin{bmatrix}\vec{S_2}\cdot\vec{E_2}\\\vec{S_1}\cdot\vec{S}\\\vec{S_2}\cdot\vec{D} \end{bmatrix}$ 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Where:
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{E_1}=\vec{P_1}-\vec{P_0}$
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{E_2}=\vec{P_2}-\vec{P_0}$
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S}=\vec{O}-\vec{P_0}$
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S_1}=\vec{D}-\vec{E_2}$
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S_2}=\vec{S}-\vec{E_1}$
+            总共消耗：1次处罚，27次乘法和1次加法
+          - 判断是否满足：
+            1. t是正的
+            2. $(1-b_1-b_2), b_1, b_2$为正数，则点在三角形内
+    - 加速场景光线与平面相交计算
