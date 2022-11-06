@@ -964,6 +964,20 @@
               3. 计算相交后中间线段的交集，这段光线就是再包围盒内部
                <img src="./image/AABB2D.png" alt="2D包围盒" width="600px"></img>
             - 要点
-              - 光线进入包围盒仅在他们穿过所有平面的时候
-  
-
+              - 光线进入包围盒仅在他们穿过所有对面的时候
+              - 光线只要离开一个对面就是离开包围盒
+            - 计算：
+              - 每个平面都有一个$t_{max}$和$t_{min}$
+              - 对于一个3D的包围盒，$t_{enter}=max(t_{min})$, $t_{exit}=max(t_min)$
+              - 如果$t_{enter}\lt t_{exit}$，则光线穿过包围盒
+            - 不同情况
+              - $t_{exit}\lt0$: 光线在包围盒后面，不相交
+              - $t_{exit}\geq0$，$t_{exit}\lt0$: 光线起点在包围盒内部，有相交
+              - 总结：光线与AABB相交iff（当且仅当）$t_{enter}\lt t_{exit}$ && $t_{exit}\geq 0$
+            = 为什么选与轴平行的面来做包围盒
+              - 普通面
+                $t=\frac{(p'-o)\cdot N}{d\cdot N}$
+                <img src="./image/general_plate.png" alt="一般平面" width="300px"></img>
+              - 与x轴平行的面
+                $t=\frac{(p_{x}'-o_x)}{d_x}$
+                <img src="./image/plate_with_x.png" alt="与x轴平行的平面" width="300px"></img>
