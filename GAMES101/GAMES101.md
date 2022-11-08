@@ -892,92 +892,109 @@
       1. primary ray：射线从眼睛到物体
       2. secondary rays：经过物体后反射或折射后的射线
       3. shadow rays：从作色点到光源判定可见性的点
-  - 焦点
-    - 射线（ray）
-      - 定义：一个起点与一个方向
-      - 图例：<img src="./image/ray_equation.png" alt="光线公式" width="300px"></img>
-      - 公式：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\leq t \lt\infty$
-        任何光线上的点都可以用这个公式表示
-    - 射线与球的焦点
-      - 光线：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\leq t \lt\infty$
-      - 球（隐式表示）：$p:(p-c)^2-R^2=0$
-      - 焦点：$(o+td-c)^2-R^2=0$
-      - 计算：$at^2+bt+c=0$ where 
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $a=d \times d$
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $b=2(o-c) \times d$
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $c=(o-c) \times (o-c) - R^2$
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$
-      根据$b^2-4ac$与0的关系则可判断射线与球的相交、相切、相离关系
-      后计算较小的t则为光线与球的焦点
-    - 射线与隐式表面的焦点
-      - 光线：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\lt t \lt\infty$
-      - 一般隐式表面：$p:f(p)=0$
-      - 焦点：$f(o+td)=0$
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t解出来一定要是实数、正数
-    - 射线与三角形网格的焦点
-      - 用处：
-        - 判断光线是否可见，阴影等
-        - 判断一个点是否在物体内。一个点如果在物体内随便作一条射线，那它的焦点一定是奇数
-      - 如何计算场景物体与光线的焦点：
-        - 计算每根射线与每个三角形的焦点
-        - 缺点：计算量大，后期说优化
-      - 求光线和三角形焦点：
-        1. 第一种方法
-          - 过程
-            1. 光线和平面求焦点
-            2. 判断焦点是否在三角形内
-          - 平面定义
-            - 定义一个法线与一个点
-            <img src="./image/plane_def.png" alt="定义平面" width="300px"></img>
-            - 公式：$p:(p-p') \cdot N = 0$ 将点展开成xyz可得 $ax+by+cz+d=0$
-          - 焦点：$(p-p') \cdot N = (o+td-p') \cdot N = 0$
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{(p'-o)\cdot N}{d\cdot N}$ Where $0\leq t \lt\infty$
-        2. 第二种方法(Moller Trumbore算法)
-          - 公式：$\vec{O}+t\vec{D}=(1-b_1-b_2)\vec{P_0}+b_1\vec{P_1}+b_2\vec{P_2}$ 后半部分为重心坐标
-          - 转换：$\begin{bmatrix} t\\b_1\\b_2 \end{bmatrix}=\frac{1}{\vec{S_1}\cdot\vec{E_1}}\begin{bmatrix}\vec{S_2}\cdot\vec{E_2}\\\vec{S_1}\cdot\vec{S}\\\vec{S_2}\cdot\vec{D} \end{bmatrix}$ 
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Where:
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{E_1}=\vec{P_1}-\vec{P_0}$
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{E_2}=\vec{P_2}-\vec{P_0}$
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S}=\vec{O}-\vec{P_0}$
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S_1}=\vec{D}\times\vec{E_2}$
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S_2}=\vec{S}\times\vec{E_1}$
-            总共消耗：1次除法，27次乘法和1次加法
-          - 判断是否满足：
-            1. t是正的
-            2. $(1-b_1-b_2), b_1, b_2$为正数，则点在三角形内
-    - 加速场景光线与平面相交计算
-      - 前情提要：通过计算光线与每个平面是否相交，计算量大，速度慢
-      - 优化
-        - 包围盒（Bounding Volumes）
-          - 定义：
-            - 将物体用一个简单几何包围起来
-            - 光线如果不会碰到包围盒那就不会碰到物体
-          - 方形包围盒：
-            - 定义： 三个不同的对面(slabs)形成的交集
-            <img src="./image/slabs.png" alt="对面" width="300px"></img>
-          - 轴对齐包围合「Axis-Aligned Bounding Box (AABB)」
-            - 定义：任何轴都是沿着x、y、z轴
-          - 判定光线是否与包围盒相交
-            - 2D例子
-              1. 计算光线(这里用直线)与$x_0$与$x_1$平面的相交点
-              2. 计算光线(这里用直线)与$y_0$与$y_1$平面的相交点
-              3. 计算相交后中间线段的交集，这段光线就是再包围盒内部
-               <img src="./image/AABB2D.png" alt="2D包围盒" width="600px"></img>
-            - 要点
-              - 光线进入包围盒仅在他们穿过所有对面的时候
-              - 光线只要离开一个对面就是离开包围盒
-            - 计算：
-              - 每个平面都有一个$t_{max}$和$t_{min}$
-              - 对于一个3D的包围盒，$t_{enter}=max(t_{min})$, $t_{exit}=max(t_min)$
-              - 如果$t_{enter}\lt t_{exit}$，则光线穿过包围盒
-            - 不同情况
-              - $t_{exit}\lt0$: 光线在包围盒后面，不相交
-              - $t_{exit}\geq0$，$t_{exit}\lt0$: 光线起点在包围盒内部，有相交
-              - 总结：光线与AABB相交iff（当且仅当）$t_{enter}\lt t_{exit}$ && $t_{exit}\geq 0$
-            = 为什么选与轴平行的面来做包围盒
-              - 普通面
-                $t=\frac{(p'-o)\cdot N}{d\cdot N}$
-                <img src="./image/general_plate.png" alt="一般平面" width="300px"></img>
-              - 与x轴平行的面
-                $t=\frac{(p_{x}'-o_x)}{d_x}$
-                <img src="./image/plate_with_x.png" alt="与x轴平行的平面" width="300px"></img>
+### 相机光线（空间转换）
+- 栅格空间「raster space」$\rightarrow$ NDC「归一化空间」
+  - 屏幕像素点转$[0,1]$空间
+- NDC「归一化空间」$\rightarrow 屏幕空间
+  - $[0,1]$空间转$[-1,1]$
+  <img src="./image/NDC.png" alt="光线归一化" width="200px"></img>
+- 公式：
+  - $ImageAspectRatio = \frac{ImageWidth}{ImageHeight}$ 屏幕比，使得长方形转成正方形
+  - $PixelCamera_x = (2 \times PixelScreen_x - 1) \times ImageAspectRatio$
+  - $PixelCamera_y = (1 - 2 \times PixelScreen_y)$
+- 考虑视野范围：
+  - $PixelCamera_x = (2 \times PixelScreen_x - 1) \times ImageAspectRatio tan(\frac{\alpha}{2})$
+  - $PixelCamera_y = (1 - 2 \times PixelScreen_y) \times tan(\frac{\alpha}{2})$
+  <img src="./image/camera_field.png" alt="摄像机视野" width="300px"></img>
+- 最后统一世界空间，方便所有物体在同一空间计算
+
+### 焦点
+- 射线（ray）
+  - 定义：一个起点与一个方向
+  - 图例：<img src="./image/ray_equation.png" alt="光线公式" width="300px"></img>
+  - 公式：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\leq t \lt\infty$
+    任何光线上的点都可以用这个公式表示
+- 射线与球的焦点
+  - 光线：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\leq t \lt\infty$
+  - 球（隐式表示）：$p:(p-c)^2-R^2=0$
+  - 焦点：$(o+td-c)^2-R^2=0$
+  - 计算：$at^2+bt+c=0$ where 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $a=d \times d$
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $b=2(o-c) \times d$
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $c=(o-c) \times (o-c) - R^2$
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$
+  根据$b^2-4ac$与0的关系则可判断射线与球的相交、相切、相离关系
+  后计算较小的t则为光线与球的焦点
+- 射线与隐式表面的焦点
+  - 光线：$r(t)=o+td$&nbsp;&nbsp;&nbsp;$0\lt t \lt\infty$
+  - 一般隐式表面：$p:f(p)=0$
+  - 焦点：$f(o+td)=0$
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t解出来一定要是实数、正数
+- 射线与三角形网格的焦点
+  - 用处：
+    - 判断光线是否可见，阴影等
+    - 判断一个点是否在物体内。一个点如果在物体内随便作一条射线，那它的焦点一定是奇数
+  - 如何计算场景物体与光线的焦点：
+    - 计算每根射线与每个三角形的焦点
+    - 缺点：计算量大，后期说优化
+  - 求光线和三角形焦点：
+    1. 第一种方法
+      - 过程
+        1. 光线和平面求焦点
+        2. 判断焦点是否在三角形内
+      - 平面定义
+        - 定义一个法线与一个点
+        <img src="./image/plane_def.png" alt="定义平面" width="300px"></img>
+        - 公式：$p:(p-p') \cdot N = 0$ 将点展开成xyz可得 $ax+by+cz+d=0$
+      - 焦点：$(p-p') \cdot N = (o+td-p') \cdot N = 0$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $t=\frac{(p'-o)\cdot N}{d\cdot N}$ Where $0\leq t \lt\infty$
+    2. 第二种方法(Moller Trumbore算法)
+      - 公式：$\vec{O}+t\vec{D}=(1-b_1-b_2)\vec{P_0}+b_1\vec{P_1}+b_2\vec{P_2}$ 后半部分为重心坐标
+      - 转换：$\begin{bmatrix} t\\b_1\\b_2 \end{bmatrix}=\frac{1}{\vec{S_1}\cdot\vec{E_1}}\begin{bmatrix}\vec{S_2}\cdot\vec{E_2}\\\vec{S_1}\cdot\vec{S}\\\vec{S_2}\cdot\vec{D} \end{bmatrix}$ 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Where:
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{E_1}=\vec{P_1}-\vec{P_0}$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{E_2}=\vec{P_2}-\vec{P_0}$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S}=\vec{O}-\vec{P_0}$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S_1}=\vec{D}\times\vec{E_2}$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\vec{S_2}=\vec{S}\times\vec{E_1}$
+        总共消耗：1次除法，27次乘法和1次加法
+      - 判断是否满足：
+        1. t是正的
+        2. $(1-b_1-b_2), b_1, b_2$为正数，则点在三角形内
+- 加速场景光线与平面相交计算
+  - 前情提要：通过计算光线与每个平面是否相交，计算量大，速度慢
+  - 优化
+    - 包围盒（Bounding Volumes）
+      - 定义：
+        - 将物体用一个简单几何包围起来
+        - 光线如果不会碰到包围盒那就不会碰到物体
+      - 方形包围盒：
+        - 定义： 三个不同的对面(slabs)形成的交集
+        <img src="./image/slabs.png" alt="对面" width="300px"></img>
+      - 轴对齐包围合「Axis-Aligned Bounding Box (AABB)」
+        - 定义：任何轴都是沿着x、y、z轴
+      - 判定光线是否与包围盒相交
+        - 2D例子
+          1. 计算光线(这里用直线)与$x_0$与$x_1$平面的相交点
+          2. 计算光线(这里用直线)与$y_0$与$y_1$平面的相交点
+          3. 计算相交后中间线段的交集，这段光线就是再包围盒内部
+            <img src="./image/AABB2D.png" alt="2D包围盒" width="600px"></img>
+        - 要点
+          - 光线进入包围盒仅在他们穿过所有对面的时候
+          - 光线只要离开一个对面就是离开包围盒
+        - 计算：
+          - 每个平面都有一个$t_{max}$和$t_{min}$
+          - 对于一个3D的包围盒，$t_{enter}=max(t_{min})$, $t_{exit}=max(t_min)$
+          - 如果$t_{enter}\lt t_{exit}$，则光线穿过包围盒
+        - 不同情况
+          - $t_{exit}\lt0$: 光线在包围盒后面，不相交
+          - $t_{exit}\geq0$，$t_{exit}\lt0$: 光线起点在包围盒内部，有相交
+          - 总结：光线与AABB相交iff（当且仅当）$t_{enter}\lt t_{exit}$ && $t_{exit}\geq 0$
+        = 为什么选与轴平行的面来做包围盒
+          - 普通面
+            $t=\frac{(p'-o)\cdot N}{d\cdot N}$
+            <img src="./image/general_plate.png" alt="一般平面" width="300px"></img>
+          - 与x轴平行的面
+            $t=\frac{(p_{x}'-o_x)}{d_x}$
+            <img src="./image/plate_with_x.png" alt="与x轴平行的平面" width="300px"></img>
+
