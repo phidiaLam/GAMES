@@ -907,6 +907,7 @@
   - $PixelCamera_y = (1 - 2 \times PixelScreen_y) \times tan(\frac{\alpha}{2})$
   <img src="./image/camera_field.png" alt="摄像机视野" width="300px"></img>
 - 最后统一世界空间，方便所有物体在同一空间计算
+- ref: [Ray-Tracing: Generating Camera Rays](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays)
 
 ### 焦点
 - 射线（ray）
