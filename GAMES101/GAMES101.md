@@ -962,40 +962,43 @@
       - 判断是否满足：
         1. t是正的
         2. $(1-b_1-b_2), b_1, b_2$为正数，则点在三角形内
-- 加速场景光线与平面相交计算
-  - 前情提要：通过计算光线与每个平面是否相交，计算量大，速度慢
-  - 优化
-    - 包围盒（Bounding Volumes）
-      - 定义：
-        - 将物体用一个简单几何包围起来
-        - 光线如果不会碰到包围盒那就不会碰到物体
-      - 方形包围盒：
-        - 定义： 三个不同的对面(slabs)形成的交集
-        <img src="./image/slabs.png" alt="对面" width="300px"></img>
-      - 轴对齐包围合「Axis-Aligned Bounding Box (AABB)」
-        - 定义：任何轴都是沿着x、y、z轴
-      - 判定光线是否与包围盒相交
-        - 2D例子
-          1. 计算光线(这里用直线)与$x_0$与$x_1$平面的相交点
-          2. 计算光线(这里用直线)与$y_0$与$y_1$平面的相交点
-          3. 计算相交后中间线段的交集，这段光线就是再包围盒内部
-            <img src="./image/AABB2D.png" alt="2D包围盒" width="600px"></img>
-        - 要点
-          - 光线进入包围盒仅在他们穿过所有对面的时候
-          - 光线只要离开一个对面就是离开包围盒
-        - 计算：
-          - 每个平面都有一个$t_{max}$和$t_{min}$
-          - 对于一个3D的包围盒，$t_{enter}=max(t_{min})$, $t_{exit}=max(t_min)$
-          - 如果$t_{enter}\lt t_{exit}$，则光线穿过包围盒
-        - 不同情况
-          - $t_{exit}\lt0$: 光线在包围盒后面，不相交
-          - $t_{exit}\geq0$，$t_{exit}\lt0$: 光线起点在包围盒内部，有相交
-          - 总结：光线与AABB相交iff（当且仅当）$t_{enter}\lt t_{exit}$ && $t_{exit}\geq 0$
-        = 为什么选与轴平行的面来做包围盒
-          - 普通面
-            $t=\frac{(p'-o)\cdot N}{d\cdot N}$
-            <img src="./image/general_plate.png" alt="一般平面" width="300px"></img>
-          - 与x轴平行的面
-            $t=\frac{(p_{x}'-o_x)}{d_x}$
-            <img src="./image/plate_with_x.png" alt="与x轴平行的平面" width="300px"></img>
+### 包围盒
+- 前情提要：通过计算每个光线与每个平面是否相交，计算量大，速度慢
+- 优化
+  - 包围盒（Bounding Volumes）
+    - 定义：
+      - 将物体用一个简单几何包围起来
+      - 光线如果不会碰到包围盒那就不会碰到物体
+    - 方形包围盒：
+      - 定义： 三个不同的对面(slabs)形成的交集
+      <img src="./image/slabs.png" alt="对面" width="300px"></img>
+    - 轴对齐包围合「Axis-Aligned Bounding Box (AABB)」
+      - 定义：任何轴都是沿着x、y、z轴
+    - 判定光线是否与包围盒相交
+      - 2D例子
+        1. 计算光线(这里用直线)与$x_0$与$x_1$平面的相交点
+        2. 计算光线(这里用直线)与$y_0$与$y_1$平面的相交点
+        3. 计算相交后中间线段的交集，这段光线就是再包围盒内部
+          <img src="./image/AABB2D.png" alt="2D包围盒" width="600px"></img>
+      - 要点
+        - 光线进入包围盒仅在他们穿过所有对面的时候
+        - 光线只要离开一个对面就是离开包围盒
+      - 计算：
+        - 每个平面都有一个$t_{max}$和$t_{min}$
+        - 对于一个3D的包围盒，$t_{enter}=max(t_{min})$, $t_{exit}=max(t_min)$
+        - 如果$t_{enter}\lt t_{exit}$，则光线穿过包围盒
+      - 不同情况
+        - $t_{exit}\lt0$: 光线在包围盒后面，不相交
+        - $t_{exit}\geq0$，$t_{exit}\lt0$: 光线起点在包围盒内部，有相交
+        - 总结：光线与AABB相交iff（当且仅当）$t_{enter}\lt t_{exit}$ && $t_{exit}\geq 0$
+      = 为什么选与轴平行的面来做包围盒
+        - 普通面
+          $t=\frac{(p'-o)\cdot N}{d\cdot N}$
+          <img src="./image/general_plate.png" alt="一般平面" width="300px"></img>
+        - 与x轴平行的面
+          $t=\frac{(p_{x}'-o_x)}{d_x}$
+          <img src="./image/plate_with_x.png" alt="与x轴平行的平面" width="300px"></img>
+#### 均匀格子（Uniform grids）
+
+#### 空间划分（Spatial partitions）
 
