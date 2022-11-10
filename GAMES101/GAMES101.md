@@ -999,6 +999,11 @@
           $t=\frac{(p_{x}'-o_x)}{d_x}$
           <img src="./image/plate_with_x.png" alt="与x轴平行的平面" width="300px"></img>
 #### 均匀格子（Uniform grids）
-
+- 过程
+  1. 找到场景，找出包围盒
+   <img src="./image/uniform_grid1.png" alt="找出包围盒" width="300px"></img>
+  2. 将包围盒划分成多个网格
+  3. 计算光线与网格是否相交
+  4. 相交情况下，计算光线与物体是否相交
 #### 空间划分（Spatial partitions）
 
