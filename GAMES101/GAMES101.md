@@ -1003,7 +1003,16 @@
   1. 找到场景，找出包围盒
    <img src="./image/uniform_grid1.png" alt="找出包围盒" width="300px"></img>
   2. 将包围盒划分成多个网格
-  3. 计算光线与网格是否相交
-  4. 相交情况下，计算光线与物体是否相交
+  <img src="./image/uniform_grid2.png" alt="找出包围盒" width="300px"></img>
+  3. 计算格子与物体表面是否相交
+  <img src="./image/uniform_grid3.png" alt="找出包围盒" width="300px"></img>
+  4. 计算光线与网格是否相交
+  5. 相交情况下，计算光线与物体是否相交
+  <img src="./image/uniform_grid4.png" alt="找出包围盒" width="300px"></img>
+- 问题：
+  - 如果格子划分的太少（极端点一个），计算后，得算每个光线与物体的焦点，与没用均匀格子无异
+  - 如果格子划分的太多，会计算过多光线与格子的相交，浪费性能
+- 结论
+  - 三维中，格子数量$=27\times$物体数量
 #### 空间划分（Spatial partitions）
 
