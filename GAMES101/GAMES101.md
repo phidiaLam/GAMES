@@ -1049,4 +1049,44 @@
     - 不好判定一个三角形在包围盒内还是外
       简单通过三角形顶点判断的话，容易出现包围盒在三角形内，但是这个三角形却不算在包围盒内的三角形的错误情况
     - 有时候一个物体穿过多个盒子，容易储存到多个盒子中，重复计算
+#### 物体划分（Object partition）
+- 层次包围盒「Bounding Volume Hierarchy -- BVH」
+  - 过程：
+    - 找到最外层包围盒
+    - 递归该步骤将当前包围盒划分成两个并重新判断包围盒
+    - 直到叶子节点拥有较少的三角形
+    <img src="./image/BVH1.png" alt="BVH" width="400px"></img>
+    <img src="./image/BVH2.png" alt="BVH" width="400px"></img>
+    <img src="./image/BVH3.png" alt="BVH" width="400px"></img>
+    （PS：包围盒子可能相交，物体只会在一个包围盒中，尽可能重叠的少）
+  - 划分技巧：
+    1. 选择长的轴进行划分
+    2. 取中间的物体进行划分
+  - 存储
+    - 内部节点
+      - 包围盒信息
+      - children节点指针
+    - 叶子节点
+      - 包围盒信息
+      - 物体列表
+  - 算法
+    ``` C++
+    Intersect(Ray ray, BVH node) {
+      if (ray misses node.bbox) return;
+
+      if (node is a leaf node)
+        test intersection with all objs;
+        return closest intersection;
+
+      hit1 = Intersect(ray, node.child1);
+      hit2 = intersect(ray, node.child2);
+    }
+    ```
+#### 空间划分 VS 物体划分
+- 空间划分
+  - 包围盒不重叠
+  - 物体可能在多个包围盒
+- 物体划分
+  - 包围盒重叠
+  - 物体只会在一个包围盒
 
