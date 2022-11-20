@@ -1091,3 +1091,67 @@
   - 物体只会在一个包围盒
 
 ### 辐射度量学「Basic Radiometry」
+- 为什么要使用辐射度量学
+  - Blinn-Phong光比如用10，那么单位是什么
+  - Whitted风格的光线追踪不够真实，其中做了很多的简化
+    - 比如光线的反射到一定的区域里，而不是沿着完美的镜像方向去
+    - 折射每次损失是多少？
+  - 辐射度量学将给我们实际的光的物理量方法，我们可以将光准确的定义出来，包括精确的描述物体表面与光的作用，与光源材质，光源传播方法等
+- 定义：如何去描述光，其中定义了一系列的方法与空间中属性，当还是几何光学（如直线传播没有波动性）
+  - 光照属性：
+    - radiant flux（辐射通量）
+    - intensity（辐射强度）
+    - irradiance（辐射照度）
+    - radiance（辐射亮度）
+#### 能量与通量
+  - Radiant Energy[辐射能量]
+    - 定义：电磁辐射的能量
+    - 单位：焦耳[Joule]
+    - 符号：Q[J=Joule]
+  - Radiant Flux(Power)[辐射通量]
+    - 定义：每单位之间放射、反射、转移或接受的能量
+    - 单位：瓦特[W=Watt][lm=lumen]*
+    - 符号：$\Phi=\frac{dQ}{dt}$
+#### 光的测量
+  - 三种测量
+    - Radiant Intensity 辐射强度
+    - Irradiance 辐照度
+    - Radiance 辐射传播？
+    <img src="./image/light_measurements.png" alt="光线测量" width="400px"></img>
+  - 辐射强度（通量）
+    - 定义：每单位立体角(solid angle)的能量
+    - 公式：$I(\omega)=\frac{d\Phi}{d\omega}$ ($\Phi$能量，$\omega$立体角)
+    - 单位：$\frac{W}{sr}$ 或 $\frac{lm}{sr}=cd=candela$  ($sr$立体角)
+    - 角度
+      - 定义：圆弧长度与半径之比
+      - 公式：$\theta=\frac{l}{r}$ 
+      - 圆有$2\pi$的角度 （单位：radians）
+      <img src="./image/angle.png" alt="角度" width="200px"></img>
+    - 立体角
+      - 定义：球体上的减去面积与半径平方的比率 
+      - 公式：$\Omega=\frac{A}{r^2}$
+      - 整个球有$4\pi$的立体角 （单位：steradians）
+      <img src="./image/solid_angle.png" alt="立体角" width="200px"></img>
+    - 微分立体角
+      - 微分立体面积为：$dA=(rd\theta)(rsin\theta d\phi)=r^2sin\theta d\theta d\phi$
+      <img src="./image/differential_solid_angles_area.png" alt="微分立体面积" width="600px"></img>
+      现在的我不懂记录的，希望我以后不懂看一眼就懂：
+        1. 其中弧度的定义就是其所对的单位圆的弧的长度，所以这里竖直区域的边长为$rd\theta$,水平的边长为$rsin\theta d\phi$，均为弧度制
+        2. 通过$\theta$和$\phi$能定义一个立体角的位置
+      - 可推导出：$d\omega=\frac{dA}{r^2}=sin\theta d\theta d\phi$
+      - 所以如果把整个球里面所有单位立体角积分加起来应该就是$4\pi$
+        Sphere:$S^2$
+        $\Omega = \int_{S^2}d\omega$
+        &nbsp;&nbsp;&nbsp;&nbsp;$=\int_{0}^{2\pi}\int_{0}^{\pi}sin\theta d\theta d\phi$
+        &nbsp;&nbsp;&nbsp;&nbsp;$=4\pi$
+    - 各向同性的点源
+      - 能量：$\Phi = \int_{S^2}Id\omega$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$=4\pi I$
+      - 通量：$I=\frac{\Phi}{4\pi}$
+       <img src="./image/isotropic_point_source.png" alt="各向同性的点源" width="400px"></img>
+    - 现实例子
+      - 下列灯泡输出815流明
+      - 11w功率，60w是等效白炽灯
+      - 假设是均匀扩散的光源，辐射强度（通量）为：
+        $Intensity = 815\ lumens\ / \ 4\pi sr$
+     <img src="./image/radiant_intensity_live.png" alt="辐射强度现实例子" width="400px"></img>
