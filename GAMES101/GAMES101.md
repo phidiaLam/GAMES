@@ -1120,7 +1120,7 @@
     <img src="./image/light_measurements.png" alt="光线测量" width="400px"></img>
   - 辐射强度（通量）
     - 定义：每单位立体角(solid angle)的能量
-    - 公式：$I(\omega)=\frac{d\Phi}{d\omega}$ ($\Phi$能量，$\omega$立体角)
+    - 公式：$I(\omega)\equiv\frac{d\Phi}{d\omega}$ ($\Phi$能量，$\omega$立体角)
     - 单位：$\frac{W}{sr}$ 或 $\frac{lm}{sr}=cd=candela$  ($sr$立体角)
     - 角度
       - 定义：圆弧长度与半径之比
@@ -1155,3 +1155,9 @@
       - 假设是均匀扩散的光源，辐射强度（通量）为：
         $Intensity = 815\ lumens\ / \ 4\pi sr$
      <img src="./image/radiant_intensity_live.png" alt="辐射强度现实例子" width="400px"></img>
+  - 辐照度 Irradiance
+    - 定义：一个表面点上所收到的能量。只有和入射光线相垂直的光线才算，如果不垂直，只能计算垂直的分量（如照明与着色中Blinn-Phong模型的漫反射中所说）
+    - 公式：$E(x)\equiv\frac{d\Phi(x)}{dA}$
+    - 单位：$\frac{W}{m^2}$ 或 $\frac{lm}{m^2} = lux$
+    <img src="./image/irradiance1.png" alt="辐照度" width="200px"></img>
+    <img src="./image/irradiance2.png" alt="能量衰减" width="500px"></img>
