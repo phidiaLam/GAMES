@@ -215,27 +215,30 @@ inline Intersection Triangle::getIntersection(Ray ray)
     if (dotProduct(ray.direction, normal) > 0)
         return inter;
     double u, v, t_tmp = 0;
-    Vector3f pvec = crossProduct(ray.direction, e2);
-    double det = dotProduct(e1, pvec);
+    Vector3f pvec = crossProduct(ray.direction, e2); // s1
+    double det = dotProduct(e1, pvec); 
     if (fabs(det) < EPSILON)
         return inter;
 
     double det_inv = 1. / det;
-    Vector3f tvec = ray.origin - v0;
+    Vector3f tvec = ray.origin - v0; //s0
     u = dotProduct(tvec, pvec) * det_inv;
     if (u < 0 || u > 1)
         return inter;
-    Vector3f qvec = crossProduct(tvec, e1);
+    Vector3f qvec = crossProduct(tvec, e1); //s2
     v = dotProduct(ray.direction, qvec) * det_inv;
     if (v < 0 || u + v > 1)
         return inter;
     t_tmp = dotProduct(e2, qvec) * det_inv;
 
     // TODO find ray triangle intersection
-
-
-
-
+    inter.coords = Vector3f(t_tmp, u, v);
+    inter.distance = t_tmp;
+    inter.happened = true;
+    inter.m = m;
+    inter.normal = normal;
+    inter.obj = this;
+    
     return inter;
 }
 
