@@ -1157,11 +1157,11 @@
      <img src="./image/radiant_intensity_live.png" alt="辐射强度现实例子" width="400px"></img>
   - 辐照度 Irradiance
     - 定义：一个表面点上所收到的能量。只有和入射光线相垂直的光线才算，如果不垂直，只能计算垂直的分量（如照明与着色中Blinn-Phong模型的漫反射中所说）
-    - 公式：$E(x)\equiv\frac{d\Phi(x)}{dA}$ （$cos\theta$）
+    - 公式：$E(x)\equiv\frac{d\Phi(x)}{dA}$
     - 单位：$\frac{W}{m^2}$ 或 $\frac{lm}{m^2} = lux$
     <img src="./image/irradiance1.png" alt="辐照度" width="200px"></img>
     <img src="./image/irradiance2.png" alt="能量衰减" width="500px"></img>
   - 辐亮度 Radiance
     - 定义：每单位立体角和每单位投影面积上，由表面反射、发射或接收的能量。
-    - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$
+    - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积）
     - 单位：$\frac{W}{sr\ m^2}$或$\frac{cd}{m^2}=\frac{lm}{sr\ m^2}=nit$
