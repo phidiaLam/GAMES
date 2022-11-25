@@ -1165,3 +1165,7 @@
     - 定义：每单位立体角和每单位投影面积上，由表面反射、发射或接收的能量。
     - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积）
     - 单位：$\frac{W}{sr\ m^2}$或$\frac{cd}{m^2}=\frac{lm}{sr\ m^2}=nit$
+    <img src="./image/radiance.png" alt="能量衰减" width="500px"></img>
+    - 根据前面辐通量辐照度的定义，我们还可以得到：
+      - 辐亮度是每单位投影面积的辐通量
+      - 辐亮度是每单位立体角的辐照度
