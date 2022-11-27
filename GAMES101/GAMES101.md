@@ -1104,85 +1104,86 @@
     - irradiance（辐射照度）
     - radiance（辐射亮度）
 #### 能量与通量
-  - Radiant Energy[辐射能量]
-    - 定义：电磁辐射的能量
-    - 单位：焦耳[Joule]
-    - 符号：Q[J=Joule]
-  - Radiant Flux(Power)[辐射通量]
-    - 定义：每单位之间放射、反射、转移或接受的能量
-    - 单位：瓦特[W=Watt][lm=lumen]*
-    - 符号：$\Phi=\frac{dQ}{dt}$
+- Radiant Energy[辐射能量]
+  - 定义：电磁辐射的能量
+  - 单位：焦耳[Joule]
+  - 符号：Q[J=Joule]
+- Radiant Flux(Power)[辐射通量]
+  - 定义：每单位之间放射、反射、转移或接受的能量
+  - 单位：瓦特[W=Watt][lm=lumen]*
+  - 符号：$\Phi=\frac{dQ}{dt}$
 #### 光的测量
-  - 可参考：[辐射强度，辐射照度，辐射亮度](https://zhuanlan.zhihu.com/p/495584698)
-  - 三种测量
-    - Radiant Intensity 辐射强度
-    - Irradiance 辐照度
-    - Radiance 辐亮度
-    <img src="./image/light_measurements.png" alt="光线测量" width="400px"></img>
-  - 辐射强度
-    - 定义：每单位立体角(solid angle)的能量
-    - 公式：$I(\omega)\equiv\frac{d\Phi}{d\omega}$ ($\Phi$辐通量，$\omega$立体角)
-    - 单位：$\frac{W}{sr}$ 或 $\frac{lm}{sr}=cd=candela$  ($sr$立体角)
-    - 角度
-      - 定义：圆弧长度与半径之比
-      - 公式：$\theta=\frac{l}{r}$ 
-      - 圆有$2\pi$的角度 （单位：radians）
-      <img src="./image/angle.png" alt="角度" width="200px"></img>
-    - 立体角
-      - 定义：球体上的减去面积与半径平方的比率 
-      - 公式：$\Omega=\frac{A}{r^2}$
-      - 整个球有$4\pi$的立体角 （单位：steradians）
-      <img src="./image/solid_angle.png" alt="立体角" width="200px"></img>
-    - 微分立体角
-      - 微分立体面积为：$dA=(rd\theta)(rsin\theta d\phi)=r^2sin\theta d\theta d\phi$
-      <img src="./image/differential_solid_angles_area.png" alt="微分立体面积" width="600px"></img>
-      现在的我不懂记录的，希望我以后不懂看一眼就懂：
-        1. 其中弧度的定义就是其所对的单位圆的弧的长度，所以这里竖直区域的边长为$rd\theta$,水平的边长为$rsin\theta d\phi$，均为弧度制
-        2. 通过$\theta$和$\phi$能定义一个立体角的位置
-      - 可推导出：$d\omega=\frac{dA}{r^2}=sin\theta d\theta d\phi$
-      - 所以如果把整个球里面所有单位立体角积分加起来应该就是$4\pi$
-        Sphere:$S^2$
-        $\Omega = \int_{S^2}d\omega$
-        &nbsp;&nbsp;&nbsp;&nbsp;$=\int_{0}^{2\pi}\int_{0}^{\pi}sin\theta d\theta d\phi$
-        &nbsp;&nbsp;&nbsp;&nbsp;$=4\pi$
-    - 各向同性的点源
-      - 能量：$\Phi = \int_{S^2}Id\omega$
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$=4\pi I$
-      - 通量：$I=\frac{\Phi}{4\pi}$
-       <img src="./image/isotropic_point_source.png" alt="各向同性的点源" width="400px"></img>
-    - 现实例子
-      - 下列灯泡输出815流明
-      - 11w功率，60w是等效白炽灯
-      - 假设是均匀扩散的光源，辐射强度（通量）为：
-        $Intensity = 815\ lumens\ / \ 4\pi sr$
-     <img src="./image/radiant_intensity_live.png" alt="辐射强度现实例子" width="400px"></img>
-  - 辐照度 Irradiance
-    - 定义：一个表面点上所收到的能量。只有和入射光线相垂直的光线才算，如果不垂直，只能计算垂直的分量（如照明与着色中Blinn-Phong模型的漫反射中所说）
-    - 公式：$E(x)\equiv\frac{d\Phi(x)}{dA}$
-    - 单位：$\frac{W}{m^2}$ 或 $\frac{lm}{m^2} = lux$
-    <img src="./image/irradiance1.png" alt="辐照度" width="200px"></img>
-    <img src="./image/irradiance2.png" alt="能量衰减" width="500px"></img>
-  - 辐亮度 Radiance
-    - 定义：每单位立体角和每单位投影面积上，由表面反射、发射或接收的能量。
-    - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积）
-    （PS：为什么cos在下面，那不是会出现角度越大，亮度越高吗？
-      这个结论成立的前提条件是要确定辐射强度（即单位立体角内的辐射通量）和方向角的关系。像朗伯面是辐射强度与方向角的关系是满足余弦定律，最后计算的结果就是朗伯面在各个方向的辐射亮度相等。引用：https://www.zhihu.com/question/54561197）
-    - 单位：$\frac{W}{sr\ m^2}$或$\frac{cd}{m^2}=\frac{lm}{sr\ m^2}=nit$
-    <img src="./image/radiance.png" alt="能量衰减" width="500px"></img>
-    - 根据前面辐通量辐照度的定义，我们还可以得到：
-      - 辐亮度是每单位投影面积的辐通量
-      - 辐亮度是每单位立体角的辐照度
-    - 入射光线（Incident Radiance）
-      - 公式：$L(p,\omega)=\frac{dE(p)}{d\omega cos\theta}$
-      <img src="./image/incident_radiance.png" alt="入射光线" width="500px"></img>
-    - 射出光线（Exiting Radiance）
-      - 公式：$L(p,\omega)=\frac{dI(p,\omega)}{dAcos\theta}$
-      <img src="./image/incident_radiance.png" alt="入射光线" width="500px"></img>
-    - 辐射照度vs辐射亮度
-      - 辐射照度与角度无关，是$dA$区域所收到全部能量
-      - 辐射亮度$dA$区域接收来自$d\omega$单位立体角的能量
-      - 可推导出：
-        $dE(p,\omega)=L_i(p,\omega)cos\theta d\omega$
-        积分后：
-        $E(p)=\int_{H^2}L_i(p,\omega)cos\theta d\omega$
-    
+- 可参考：[辐射强度，辐射照度，辐射亮度](https://zhuanlan.zhihu.com/p/495584698)
+- 三种测量
+  - Radiant Intensity 辐射强度
+  - Irradiance 辐照度
+  - Radiance 辐亮度
+  <img src="./image/light_measurements.png" alt="光线测量" width="400px"></img>
+- 辐射强度
+  - 定义：每单位立体角(solid angle)的能量
+  - 公式：$I(\omega)\equiv\frac{d\Phi}{d\omega}$ ($\Phi$辐通量，$\omega$立体角)
+  - 单位：$\frac{W}{sr}$ 或 $\frac{lm}{sr}=cd=candela$  ($sr$立体角)
+  - 角度
+    - 定义：圆弧长度与半径之比
+    - 公式：$\theta=\frac{l}{r}$ 
+    - 圆有$2\pi$的角度 （单位：radians）
+    <img src="./image/angle.png" alt="角度" width="200px"></img>
+  - 立体角
+    - 定义：球体上的减去面积与半径平方的比率 
+    - 公式：$\Omega=\frac{A}{r^2}$
+    - 整个球有$4\pi$的立体角 （单位：steradians）
+    <img src="./image/solid_angle.png" alt="立体角" width="200px"></img>
+  - 微分立体角
+    - 微分立体面积为：$dA=(rd\theta)(rsin\theta d\phi)=r^2sin\theta d\theta d\phi$
+    <img src="./image/differential_solid_angles_area.png" alt="微分立体面积" width="600px"></img>
+    现在的我不懂记录的，希望我以后不懂看一眼就懂：
+      1. 其中弧度的定义就是其所对的单位圆的弧的长度，所以这里竖直区域的边长为$rd\theta$,水平的边长为$rsin\theta d\phi$，均为弧度制
+      2. 通过$\theta$和$\phi$能定义一个立体角的位置
+    - 可推导出：$d\omega=\frac{dA}{r^2}=sin\theta d\theta d\phi$
+    - 所以如果把整个球里面所有单位立体角积分加起来应该就是$4\pi$
+      Sphere:$S^2$
+      $\Omega = \int_{S^2}d\omega$
+      &nbsp;&nbsp;&nbsp;&nbsp;$=\int_{0}^{2\pi}\int_{0}^{\pi}sin\theta d\theta d\phi$
+      &nbsp;&nbsp;&nbsp;&nbsp;$=4\pi$
+  - 各向同性的点源
+    - 能量：$\Phi = \int_{S^2}Id\omega$
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$=4\pi I$
+    - 通量：$I=\frac{\Phi}{4\pi}$
+      <img src="./image/isotropic_point_source.png" alt="各向同性的点源" width="400px"></img>
+  - 现实例子
+    - 下列灯泡输出815流明
+    - 11w功率，60w是等效白炽灯
+    - 假设是均匀扩散的光源，辐射强度（通量）为：
+      $Intensity = 815\ lumens\ / \ 4\pi sr$
+    <img src="./image/radiant_intensity_live.png" alt="辐射强度现实例子" width="400px"></img>
+- 辐照度 Irradiance
+  - 定义：一个表面点上所收到的能量。只有和入射光线相垂直的光线才算，如果不垂直，只能计算垂直的分量（如照明与着色中Blinn-Phong模型的漫反射中所说）
+  - 公式：$E(x)\equiv\frac{d\Phi(x)}{dA}$
+  - 单位：$\frac{W}{m^2}$ 或 $\frac{lm}{m^2} = lux$
+  <img src="./image/irradiance1.png" alt="辐照度" width="200px"></img>
+  <img src="./image/irradiance2.png" alt="能量衰减" width="500px"></img>
+- 辐亮度 Radiance
+  - 定义：每单位立体角和每单位投影面积上，由表面反射、发射或接收的能量。
+  - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积）
+  （PS：为什么cos在下面，那不是会出现角度越大，亮度越高吗？
+    这个结论成立的前提条件是要确定辐射强度（即单位立体角内的辐射通量）和方向角的关系。像朗伯面是辐射强度与方向角的关系是满足余弦定律，最后计算的结果就是朗伯面在各个方向的辐射亮度相等。引用：https://www.zhihu.com/question/54561197）
+  - 单位：$\frac{W}{sr\ m^2}$或$\frac{cd}{m^2}=\frac{lm}{sr\ m^2}=nit$
+  <img src="./image/radiance.png" alt="能量衰减" width="500px"></img>
+  - 根据前面辐通量辐照度的定义，我们还可以得到：
+    - 辐亮度是每单位投影面积的辐通量
+    - 辐亮度是每单位立体角的辐照度
+  - 入射光线（Incident Radiance）
+    - 公式：$L(p,\omega)=\frac{dE(p)}{d\omega cos\theta}$
+    <img src="./image/incident_radiance.png" alt="入射光线" width="500px"></img>
+  - 射出光线（Exiting Radiance）
+    - 公式：$L(p,\omega)=\frac{dI(p,\omega)}{dAcos\theta}$
+    <img src="./image/incident_radiance.png" alt="入射光线" width="500px"></img>
+  - 辐射照度vs辐射亮度
+    - 辐射照度与角度无关，是$dA$区域所收到全部能量
+    - 辐射亮度$dA$区域接收来自$d\omega$单位立体角的能量
+    - 可推导出：
+      $dE(p,\omega)=L_i(p,\omega)cos\theta d\omega$
+      积分后：
+      $E(p)=\int_{H^2}L_i(p,\omega)cos\theta d\omega$
+- 双向反射分布函数（Bidirectional Reflectance Distribution Function [BRDF]）
+  - 定义：
