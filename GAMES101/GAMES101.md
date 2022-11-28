@@ -1186,4 +1186,11 @@
       积分后：
       $E(p)=\int_{H^2}L_i(p,\omega)cos\theta d\omega$
 - 双向反射分布函数（Bidirectional Reflectance Distribution Function [BRDF]）
-  - 定义：
+  - 定义：描述的是物体表面将光能从任何一个入射方向反射到任何一个视点方向的反射特性，即入射光线经过某个表面反射后如何在各个出射方向上分布(光可能向各个方向都有反射，BRDF就是在定义如何)
+  <img src="./image/brdf.png" alt="BRFD" width="400px"></img>
+  传入的辐照度「Differential irradiance incoming」：$dE(\omega_i)=L(\omega_i)cos\theta_i d\omega_i$
+  传出的辐亮度「Differential radiance exiting」来自$dE(\omega_i)$: $dL_r(\omega_r)$
+  - 公式：$f_r(\omega_i \rightarrow \omega_r) = \frac{dL_r(\omega_r)}{dE_i(\omega_i)} = \frac{dL_r(\omega_r)}{L_i(\omega_i)cos\theta_i d\omega_i}$
+  - 单位：$(sr)^{-1}$
+  - 一些理解：
+
