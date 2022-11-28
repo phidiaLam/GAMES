@@ -1164,7 +1164,7 @@
   <img src="./image/irradiance2.png" alt="能量衰减" width="500px"></img>
 - 辐亮度 Radiance
   - 定义：每单位立体角和每单位投影面积上，由表面反射、发射或接收的能量。
-  - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积）
+  - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积，$p$为点）
   （PS：为什么cos在下面，那不是会出现角度越大，亮度越高吗？
     这个结论成立的前提条件是要确定辐射强度（即单位立体角内的辐射通量）和方向角的关系。像朗伯面是辐射强度与方向角的关系是满足余弦定律，最后计算的结果就是朗伯面在各个方向的辐射亮度相等。引用：https://www.zhihu.com/question/54561197）
   - 单位：$\frac{W}{sr\ m^2}$或$\frac{cd}{m^2}=\frac{lm}{sr\ m^2}=nit$
@@ -1192,5 +1192,8 @@
   传出的辐亮度「Differential radiance exiting」来自$dE(\omega_i)$: $dL_r(\omega_r)$
   - 公式：$f_r(\omega_i \rightarrow \omega_r) = \frac{dL_r(\omega_r)}{dE_i(\omega_i)} = \frac{dL_r(\omega_r)}{L_i(\omega_i)cos\theta_i d\omega_i}$
   - 单位：$(sr)^{-1}$
-  - 一些理解：
-
+  - 一些理解：这个公式是一个函数，记录每个入射方向（$\omega_i$）与出射方向（$\omega_r$）能量的分配。
+  - 反射方程（推导出）
+    <img src="./image/reflection_equation.png" alt="反射方程" width="400px"></img>
+    - $L_r(p, \omega_r) = \int_{H^2}f_r(p, \omega_i \rightarrow \omega_r)L_i(p,\omega_i)cos\theta_i d\omega_i$
+    - 将所有对当前出射方向有贡献的入射方向提供的能量加起来，就可以反应出当前出射方向
