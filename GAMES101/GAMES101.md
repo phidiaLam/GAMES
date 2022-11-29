@@ -1241,3 +1241,30 @@
         - $KE$为直接从光源发射后（直接光照）
         - $K^2E$为从光源出来反射一次平面再打到当前平面（间接光照）
         - $K^3E$为从光源出来反射两次平面再打到当前平面（更多的间接光照）
+         <img src="./image/global_illumination1.png" alt="反射光源例子" width="200px"></img><img src="./image/global_illumination2.png" alt="反射光源例子" width="200px"></img><img src="./image/global_illumination3.png" alt="反射光源例子" width="200px"></img>
+### 概率论
+为什么插在这边说？因为要用到呗
+#### 随机变量
+- 定义： 代表潜在值的分布
+- 概率密度函数(probability density function)：
+- 简单例子：六面骰子
+  $p(1)=p(2)=p(3)=p(4)=p(5)=p(6)$
+- 复杂例子：
+  <img src="./image/probabilities_ex.png" alt="随机变量例子" width="300px"></img>
+  - 值$x_i$与对应概率$p_i$
+- 总结：
+  - $p_i \ge 0$ 每个概率一定大于等于0
+  - $\sum_{i=1}^np_i=1$ 所有的概率加起来等于1
+#### 随机变量期望
+- 定义：重复取随机变量取平均值
+- 公式：$E[X]=\sum_{i=1}^nx_ip_i$
+- 骰子例子：$E[X]=\sum_{i=1}^n\frac{i}{6}=3.5$
+#### 概率密度函数(probability density function [PDF])
+- $X~p(x)$ 
+- 定义：一个随机变量X可以取一组连续值中的任何一个，其中一个特定值的相对概率由一个连续的概率密度函数p(x)给出
+- $p(x)$:
+  - $p(x)\geq 0$
+  - $\int p(x)dx=1$
+- $X$期望: $E[x]=\int xp(x)dx$ 
+- 考虑函数满足$X~p(x)$和$Y=f(X)$
+  - $E[Y]=E[f(X)]=\int f(x)p(x)dx$
