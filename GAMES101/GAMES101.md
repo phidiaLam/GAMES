@@ -1164,7 +1164,7 @@
   <img src="./image/irradiance2.png" alt="能量衰减" width="500px"></img>
 - 辐亮度 Radiance
   - 定义：每单位立体角和每单位投影面积上，由表面反射、发射或接收的能量。
-  - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积，$p$为点）
+  - 公式：$L(p,\omega)=\frac{d^2\Phi(p,\omega)}{d\omega dAcos\theta}$ （这边2是2次微分，$dAcos\theta$是A区域投影到垂直光线的面积，$p$为照射到的点）
   （PS：为什么cos在下面，那不是会出现角度越大，亮度越高吗？
     这个结论成立的前提条件是要确定辐射强度（即单位立体角内的辐射通量）和方向角的关系。像朗伯面是辐射强度与方向角的关系是满足余弦定律，最后计算的结果就是朗伯面在各个方向的辐射亮度相等。引用：https://www.zhihu.com/question/54561197）
   - 单位：$\frac{W}{sr\ m^2}$或$\frac{cd}{m^2}=\frac{lm}{sr\ m^2}=nit$
@@ -1197,3 +1197,47 @@
     <img src="./image/reflection_equation.png" alt="反射方程" width="400px"></img>
     - $L_r(p, \omega_r) = \int_{H^2}f_r(p, \omega_i \rightarrow \omega_r)L_i(p,\omega_i)cos\theta_i d\omega_i$
     - 将所有对当前出射方向有贡献的入射方向提供的能量加起来，就可以反应出当前出射方向
+    - 这是一个递归的函数，这次的入射可能是其他出射
+- 渲染(绘制)函数「Rendering Equation」（下面单独详细讲）
+  - 公式：$L_o(p, \omega_o) = L_e(p,\omega)+\int_{\Omega^+}L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)d\omega_i$
+  - $L_e(p, \omega_o)$为自发光的辐射亮度
+  - 所有方向默认为向外的，如$i$
+  - $\Omega^+$与$H^2$都可以表示半球
+#### 渲染函数
+- 反射函数
+  - 完整推导
+    - 对于单个入射光照：
+      <img src="./image/single_reflection.png" alt="单个光源反射方程" width="400px"></img>
+      - 公式：$L_r(x,\omega_r)=L_e(x,\omega_r)+L_i(x，\omega_i)f(x,\omega_i,\omega_r)(\omega_i,n)$
+      - $L_r(x,\omega_r)$ 为反射的光线，也是输出
+      - $L_e(x,\omega_r)$ 为自发光辐射能量
+      - $L_i(x，\omega_i)$ 为入射光线
+      - $f(x,\omega_i,\omega_r)$ 为BRDF转换函数
+      - $(\omega_i,n)$ 入射角度
+    - 对于多个入射光照：
+      <img src="./image/muli_reflection.png" alt="多个光源反射方程" width="400px"></img>
+      - 公式：$L_r(x,\omega_r)=L_e(x,\omega_r)+\sum L_i(x，\omega_i)f(x,\omega_i,\omega_r)(\omega_i,n)$
+    - 对于多个面光源
+      <img src="./image/surface_reflection.png" alt="面光源反射方程" width="400px"></img>
+      - 公式：$L_r(x,\omega_r)=L_e(x,\omega_r)+\int_\Omega L_i(x，\omega_i)f(x,\omega_i,\omega_r)(\omega_i,n)$
+      - 把这个面光源所占据的立体角积分，将面光源考虑进去
+    - 对于反射光源
+      <img src="./image/inter_reflection.png" alt="反射光源反射方程" width="400px"></img>
+      - 公式：$L_r(x,\omega_r)=L_e(x,\omega_r)+\int_\Omega L_r(x'，-\omega_i)f(x,\omega_i,\omega_r)cos\theta_i d\omega_i$
+      - 把这个面光源所占据的立体角积分，将面光源考虑进去
+      - 简化公式：$l(u)=e(u)+\int I(v)K(u,v)dv$
+      - 利用操作符(泛符)再次简写：$L=E+KL$
+      - 解出$L$:
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$L=E+KL$
+        $IL-KL=E$ ($I$为单位矩阵)
+        $(I-K)L=E$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$L=(I-K)^{-1}E$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据二项式定理（Binomial Theorem）
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$L=(I+K+K^2+K^3+...)E$
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$L=E+KE+K^2E+K^3E+...$
+        可去参考陈文灯算子法解微分方程
+      - 对于最终化简的全局光照函数$L=E+KE+K^2E+K^3E+...$
+        - $E$为光源或自发光
+        - $KE$为直接从光源发射后（直接光照）
+        - $K^2E$为从光源出来反射一次平面再打到当前平面（间接光照）
+        - $K^3E$为从光源出来反射两次平面再打到当前平面（更多的间接光照）
