@@ -1260,11 +1260,34 @@
 - 公式：$E[X]=\sum_{i=1}^nx_ip_i$
 - 骰子例子：$E[X]=\sum_{i=1}^n\frac{i}{6}=3.5$
 #### 概率密度函数(probability density function [PDF])
-- $X~p(x)$ 
+- $X$ ~ $p(x)$ 
 - 定义：一个随机变量X可以取一组连续值中的任何一个，其中一个特定值的相对概率由一个连续的概率密度函数p(x)给出
 - $p(x)$:
   - $p(x)\geq 0$
   - $\int p(x)dx=1$
 - $X$期望: $E[x]=\int xp(x)dx$ 
-- 考虑函数满足$X~p(x)$和$Y=f(X)$
+- 考虑函数满足$X$~$p(x)$和$Y=f(X)$
   - $E[Y]=E[f(X)]=\int f(x)p(x)dx$
+
+### 蒙特卡洛路径追踪
+#### 蒙特卡洛积分
+- 目的：给任何一个函数，计算其定积分
+  - 定积分：函数下的区域面积
+  - 不定积分：一个表达式，是一个导数等于$f$的函数$F$，即$F′=f$
+  - 可能一个函数是曲折的，无法写成一个式子，跳过不定积分直接计算定积分；
+  - 黎曼积分：将函数从a到b均分成n份，每份取中间位置的高度计算该高度对应的面积，并将n份面积累加起来
+- 直观实现：
+  - 在积分域内不断做随机采用，然后根据x对应的高度y，假设整个函数是一个平的函数
+  - 计算平的函数的区域面积
+  - 最后对这些采样结果求平均
+  <img src="./image/monte_carlo_integration.png" alt="蒙特卡洛积分" width="300px"></img>
+- 具体定义：
+  - 积分：$\int_a^b f(x)dx$ 对于f(x)函数，积分域为a到b
+  - 随机变量：$X_i$ ~ $p(x)$
+  - 蒙特卡洛近似：$F_N = \frac{1}{N}\sum_{i=1}^N\frac{f(X_i)}{p(X_i)}$
+  - 推导：
+    - $X_i$~$p(x)=C$ 因为模特卡洛计算$p(x)$时候是固定的，即$C$是固定的
+    - $\int_a^bp(x)dx=1$
+      $\Rightarrow \int_a^bCdx=1$
+      $\Rightarrow C=\frac{1}{b-a}$
+  <img src="./image/monte_carlo_estimator.png" alt="蒙特卡洛预估" width="300px"></img>
