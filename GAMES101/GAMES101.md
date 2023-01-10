@@ -1285,9 +1285,34 @@
   - 积分：$\int_a^b f(x)dx$ 对于f(x)函数，积分域为a到b
   - 随机变量：$X_i$ ~ $p(x)$
   - 蒙特卡洛近似：$F_N = \frac{1}{N}\sum_{i=1}^N\frac{f(X_i)}{p(X_i)}$
-  - 推导：
+  - 均匀采样推导：
     - $X_i$~$p(x)=C$ 因为模特卡洛计算$p(x)$时候是固定的，即$C$是固定的
     - $\int_a^bp(x)dx=1$
       $\Rightarrow \int_a^bCdx=1$
       $\Rightarrow C=\frac{1}{b-a}$
   <img src="./image/monte_carlo_estimator.png" alt="蒙特卡洛预估" width="300px"></img>
+    - 均匀随机变量：$X_i$ ~ $p(x) = \frac{1}{b-a}$
+    - 基础蒙特卡洛近似：$F_N = \frac{b-a}{N}\sum_{i=1}^Nf(X_i)$
+#### 路径追踪
+- Whitted-Style Ray Tracing
+  - 原理
+    - 打到光滑物体，发生折射与反射
+    - 打到粗糙物体，发射漫反射并停止
+  - 问题：
+    - 对于glossy材质，反射光还是延着镜面反射的方向是不对的
+    - 对于漫反射，停止光漫反射后的传播，这是不对的
+- Whitted-Style是错的，渲染方程是对的
+- 渲染方程两个计算问题：
+  - 积分
+  - 递归
+- 解渲染方程：
+  - 公式：$L_o(p, \omega_o) = L_e(p,\omega)+\int_{\Omega^+}L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)d\omega_i$
+  - 利用模特卡洛方法解渲染方程
+    - 假设我们要渲染一个像素的直接光照是什么
+    - 对于一个着色点看到的光，等同于四面八方来的光和PRDF作用后反射到观察方向
+    - 利用蒙特卡洛方法，对半球的入射光线进行随机采样，求最终积分的所有光的值
+    - 对于蒙特卡洛积分
+      - $f(x)$为$L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)$
+      - pdf为$p(\omega_i)=\frac{1}{2\phi}$（对于均匀采样的话）
+    - $L_o(p,\omega_o)=\int_{\Omega^+}L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)d\omega_i$
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\approx\frac{1}{N}\sum_{i=1}^N\frac{L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)}{p(\omega_i)}$
