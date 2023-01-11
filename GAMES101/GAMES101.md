@@ -1316,3 +1316,85 @@
       - pdf为$p(\omega_i)=\frac{1}{2\phi}$（对于均匀采样的话）
     - $L_o(p,\omega_o)=\int_{\Omega^+}L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)d\omega_i$
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$\approx\frac{1}{N}\sum_{i=1}^N\frac{L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)(n\cdot\omega_i)}{p(\omega_i)}$
+  - 延伸算法（直接光照）
+    ```
+    shade(p, wo)  // wo为光线出来的方向
+      随机选择N个不同的方向，按照wi的pdf  // wi为光线入射方向
+      Lo = 0.0
+      For each wi
+        Trace a ray r(p, wi)  // 从着色点朝方向wi打出一个光线
+        if ray r hit the light
+          Lo += (1 / N) * Li * fr * cosine / pdf(wi)
+      Return Lo
+    ```
+  - 全局光照算法
+    ```
+    shade(p, wo)  // wo为光线出来的方向
+      随机选择N个不同的方向，按照wi的pdf  // wi为光线入射方向
+      Lo = 0.0
+      For each wi
+        Trace a ray r(p, wi)  // 从着色点朝方向wi打出一个光线
+        If ray r hit the light
+          Lo += (1 / N) * Li * fr * cosine / pdf(wi)
+        Else If ray r hit an object at q
+          Lo += (1 / N) * shade(q, -wi) * fr * cosine / pdf(wi)
+      Return Lo
+    ```
+    <img src="./image/global_illumination_path_tracing.png" alt="全局路径追踪" width="600px"></img>
+    - 但是每次投射出的光线数量会以指数倍的速度增加
+    <img src="./image/explosion_ray_bound.png" alt="指数倍增加光线" width="600px"></img>
+  - 避免上述问题，N=1，每次只随机一条的光线
+    ```
+    shade(p, wo)  // wo为光线出来的方向
+      随机选择1个方向，按照wi的pdf 
+      Lo = 0.0
+      For each wi
+        Trace a ray r(p, wi)  // 从着色点朝方向wi打出一个光线
+        If ray r hit the light
+          Lo += (1 / N) * Li * fr * cosine / pdf(wi)
+        Else If ray r hit an object at q
+          Lo += (1 / N) * shade(q, -wi) * fr * cosine / pdf(wi)
+      Return Lo
+    ```
+    - 这里可以注意到，一个点上只会接收一条光线，会导致噪点严重，与实际偏差很大。但是可以利用增加透过一个像素的光线数量来规避这个问题。
+    <img src="./image/more_path_per_pixel.png" alt="更多光线通过一个" width="400px"></img>
+      - 如何计算求从相机经过一个像素到物体的路径
+        ```
+        ray_generation(camPos, pixel)
+          均匀在像素内取N个采样点
+          pixel_radiance = 0.0
+          for each sample in the pixel
+            Shoot a ray r(camPos, cam_to_sample)
+            If ray r hit the scene at p
+              pixel_radiance += 1 / N * shade(p, sample_to_cam)
+          Return pixel_radiance
+        ```
+    - 还有一个问题，算法不会停止
+  - 添加终止条件
+    - 不能直接设置次数的终止，直接设置次数终止会导致后面的反射丢失，从而导致能量损失，亮度与真实差异过大
+    - 解决：俄罗斯轮盘赌算法
+      - 定义：当在概率$P$中，你是ok的，在$1-P$的概率中，你将中弹。其中$0\lt P\lt 1$
+    - 运用于路径追踪
+      - 我们最后得到的着色点的出射光线为$L_o$
+      - 定一个概率$P$, 其中$0\lt P\lt 1$
+      - 如果在概率$P$中，发射光线，并且返回结果$\frac{Lo}{P}$
+      - 如果在概率$1-P$中，不发射光线，且返回结果为0
+      - 通过上述方法，你仍然可以期望最终得到的结果为$L_o$
+        $E = P * (\frac{L_o}{P}) + (1 - P) * 0 = L_o$
+        ```
+        shade(p, wo)  // wo为光线出来的方向
+          人工生成一个特殊概率P_RR
+          随机在[0, 1]均匀选择一个ksi
+          If (ksi > P_RR) return 0.0;
+
+          随机选择1个方向，按照wi的pdf 
+          Lo = 0.0
+          For each wi
+            Trace a ray r(p, wi)  // 从着色点朝方向wi打出一个光线
+            If ray r hit the light
+              Lo += (1 / N) * Li * fr * cosine / pdf(wi) / P_RR  // 除P_RR是补偿概率下的能量损失
+            Else If ray r hit an object at q
+              Lo += (1 / N) * shade(q, -wi) * fr * cosine / pdf(wi) / P_RR  // 除P_RR是补偿概率下的能量损失
+          Return Lo
+        ```
+      
