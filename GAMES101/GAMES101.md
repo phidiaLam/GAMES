@@ -1397,4 +1397,87 @@
               Lo += (1 / N) * shade(q, -wi) * fr * cosine / pdf(wi) / P_RR  // 除P_RR是补偿概率下的能量损失
           Return Lo
         ```
-      
+        **这个为路径追踪的最后公式**
+  - 小问题，小优化
+    - 在低采样的时候噪声还是严重，但这个路径追踪已经是对的
+    <img src="./image/low_spp.png" alt="低采样的噪声" width="400px"></img>
+    - 原因：
+      - 如果光源较小，那如果我们采用均匀采样就会导致有很多的光线被浪费，无法发射到光源上，需要有更多的光线才能找到光源
+      <img src="./image/more_rays.png" alt="光源更少，光线要更多才能找到光源" width="400px"></img>
+    - 优化：
+      - 如果可以对光源进行采样的话，就不会有光线被浪费了
+      - 对于光源进行均匀采样：$pdf = \frac{1}{A}$ 因为$\int pdf\, dA=1$
+      - 但是渲染方程是在积分单位立体角：$L_o=\int Li\, fr\, cos\, d\omega$
+       
+    - 通过换元，将对立体角积分转为对光源平面进行积分
+      <img src="./image/sample_from_ray.png" alt="单位立体角与光源" width="400px"></img>
+      - $d\omega = \frac{dAcos\theta'}{||x'-x||^2}$ $dAcos\theta'$为将光源平面转为投影于立体角平面的方向，后除两个位置的距离的平方，即算出单位半球的投影面积
+      - $L_o(p, \omega_o) = L_e(p,\omega)+\int_{\Omega^+}L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)cos\theta d\omega_i$
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $= L_e(p,\omega)+\int_{A}L_i(p,\omega_i)f_r(o,\omega_i,\omega_o)\frac{cos\theta cos\theta'}{||x'-x||^2} dA$
+    - 这样子就可以把问题分成两部分
+      - 直接光照 不需要轮盘赌 
+      - 间接光照 需要轮盘赌
+       <img src="./image/sample_light.png" alt="渲染方程区分" width="400px"></img>
+      - 伪代码实现：
+      ```
+        shade(p, wo)  // wo为光线出来的方向
+          // 从光源产生贡献
+          均匀在x'位置的光源平面采样（pdf_light = 1 / A）
+          L_dir = Li * fr * cosθ * cosθ' / |x' - p|^2 / pdf_light
+
+
+          // 从其他反射面产生贡献
+          L_indir = 0.0
+          使用P_RR概率测试俄罗斯轮盘赌，具体看前面
+          均匀的在半球立体角wi上进行采样（pdf_hemi = 1 / 2pi）
+          Trace a ray r(p, wi)  // 从着色点朝方向wi打出一个光线
+          If ray r hit a 不会发光的 object at q
+            L_indir = shaed(q, -wi) * fr * cosθ / pdf_hemi / P_RR
+
+          Return L_dir + L_inder
+      ```
+      - 上述还有个小小问题：如果光源于p点中有物体遮挡
+      ```
+        shade(p, wo)  // wo为光线出来的方向
+          // 从光源产生贡献
+          均匀在x'位置的光源平面采样（pdf_light = 1 / A）
+          L_dir = Li * fr * cosθ * cosθ' / |x' - p|^2 / pdf_light
+
+
+          // 从其他反射面产生贡献
+          L_indir = 0.0
+          使用P_RR概率测试俄罗斯轮盘赌，具体看前面
+          均匀的在半球立体角wi上进行采样（pdf_hemi = 1 / 2pi）
+          从p点向x‘位置放出一条光线
+          If the ray is not blocked in the middle
+            Trace a ray r(p, wi)  // 从着色点朝方向wi打出一个光线
+            If ray r hit a 不会发光的 object at q
+              L_indir = shaed(q, -wi) * fr * cosθ / pdf_hemi / P_RR
+
+          Return L_dir + L_inder
+      ```
+- 总结：
+  - 路径追踪是一个近乎100%正确的算法
+  - 光线追踪：以前 vs. 现代概念
+    - 以前：
+     - 光线追踪 = whitted-style 光线追踪
+    - 现代：
+      - 包含各种光线传播算法
+        - Path tracing
+        - Photon mapping
+        - Metropolis light Transport
+        - VCM / UPBP ...
+  - 采样理论
+    - 怎么样对一个函数进行均匀采样
+  - 采样
+    - 以后还有重要性采样
+  - 随机数的质量有没有问题？
+    - 有的，低差异序列
+  - 结合光源于采样点结合起来
+    - multiple imp. sampling
+  - 为什么平均像素多个光线的辐射就是最终的值？
+    - pixel reconstruction filter
+  - radiance是不是颜色？
+    - 不是，还得做gamme矫正，曲线，颜色空间
+  - 路径追踪仍然是indroductory的
+
