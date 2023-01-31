@@ -1481,11 +1481,28 @@
     - 不是，还得做gamme矫正，曲线，颜色空间
   - 路径追踪仍然是indroductory的
 
-## 材料与外观
-
+## 材质与外观
+- 外观是光照和材质共同作用的结果
+- 不同的材质，在光线作用下获得不同的结果，同样的模型也会渲染出不同结果
+  <img src="./image/materials_appearances.png" alt="材质与外观" width="400px"></img>
+- brdf来决定材质，所以$Material==BRDF$
 ### 不同反射材质
 #### 漫反射/朗伯[Lambertian]材料
-
+- 假设入射光是均匀的，那么入射光的radiance和出射光的是一样的，且完全不吸收能量
+  <img src="./image/diffuse_material.png" alt="漫反射材质" width="400px"></img>
+- 渲染方程：$L_o(\omega_o)=\int_{H^2}f_rL_i(\omega_i)cos\theta_id\omega_i$
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;$=f_rL_i\int_{H^2}\sout{(\omega_i)}cos\theta_id\omega_i$
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;$=\pi f_rL_i$
+  - 因为入射radiance等于出射的radiance，所以$L_i=L_o$
+  - $f_r=\frac{\rho}{\pi}$ $\rho$为反射率，可以是单通道，也可以是rgb等等
 #### Glossy材料
+- 很像镜面反射，但是不完全是镜面反射，稍微有点粗糙。类似金属抛光后的感觉
+  <img src="./image/glossy_material.png" alt="glossy材质" width="400px"></img>
+  <img src="./image/glossy_example.png" alt="glossy材质例子" width="400px"></img>
+#### 理想反射/折射材料（BSDF）
+- 同时具有反射和折射，经典的如玻璃与水
+  - $BSDF = BRDF + BTDF$
 
-#### 理想反射/折射材料
+  <img src="./image/bsdf_material.png" alt="bsdf材质" width="400px"></img>
+  <img src="./image/bsdf_example.png" alt="bsdf材质例子" width="400px"></img>
+  
