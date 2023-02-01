@@ -1505,4 +1505,46 @@
 
   <img src="./image/bsdf_material.png" alt="bsdf材质" width="400px"></img>
   <img src="./image/bsdf_example.png" alt="bsdf材质例子" width="400px"></img>
-  
+
+### 折射与反射
+#### 完美镜面反射
+- 拆解光线到$\theta$与$\phi$两个方向
+  - $\theta$方向
+    <img src="./image/reflection_theta.png" alt="反射theta方向" width="300px"></img>
+    $\theta=\theta_o=\theta_i$
+    $\omega_o+\omega_i=2cos\theta\vec{n}=2(\omega_i\cdot\vec{n})\vec{n}$
+    $\omega_o=-\omega_i+2(\omega_i\cdot\vec{n})\vec{n}$
+  - $\phi$方向
+    <img src="./image/reflection_phi.png" alt="反射phi方向" width="300px"></img>
+    $\phi=(\phi_i+\pi)mod2\pi$
+#### 镜面折射
+- 斯涅尔定律
+  <img src="./image/snell1.png" alt="反射phi方向" width="300px"></img>
+  $\eta_i sin\theta_i=\eta_t sin\theta_t$ $\eta$代表折射率
+  <img src="./image/snell2.png" alt="反射phi方向" width="300px"></img>
+  $\varphi_t = \varphi_i\pm\pi$
+  - $cos\theta_t = \sqrt{1-sin^2\theta_t}$
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$= \sqrt{1-(\frac{\eta_i}{\eta_t})^2sin^2\theta_i}$
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$= \sqrt{1-(\frac{\eta_i}{\eta_t})^2(1-cos^2\theta_i)}$
+  - 为了结果有意义，所以 $1-(\frac{\eta_i}{\eta_t})^2(1-cos^2\theta_i) \lt 0$
+  - 又因为$1-cos^2\theta_i一定小于1$，所以$\frac{\eta_i}{\eta_t} \gt 1$
+  - 如果入射介质的折射率大于折射介质的折射率就会发生全反射
+- Snell’s Window / Circle
+  - 因为水的折射率比较大，所以超过一定角度后，就会发生全反射现象
+  <img src="./image/snell_window.png" alt="snell窗口现象" width="400px"></img>
+#### Fresnel Refection/Term 菲涅尔项
+- 定义：反射率取决于入射角（和光的偏振）
+- 例子：<img src="./image/fresnel_example.png" alt="菲涅尔例子" width="400px"></img>
+- 绝缘体与导体不同的菲涅尔项
+  - 折射率为1.5的绝缘体的菲涅尔项（虚线是两个方向的极化）
+  <img src="./image/fresnel_dielectric.png" alt="绝缘体" width="400px"></img>
+  - 导体的菲涅尔项
+  <img src="./image/fresnel_conductor.png" alt="导体" width="400px"></img>
+- 计算：
+  - 准确：
+    $R_s = \lvert\frac{n_1cos\theta_i-n_2cos\theta_t}{n_1cos\theta_i+n_2cos\theta_t}\rvert^2 = \lvert\frac{n_1cos\theta_i-n_2\sqrt{1-(\frac{n_1}{n_2}sin\theta_i)^2}}{n_1cos\theta_i+n_2\sqrt{1-(\frac{n_1}{n_2}sin\theta_i)^2}}\rvert^2$
+    $R_p = \lvert\frac{n_1cos\theta_t-n_2cos\theta_i}{n_1cos\theta_t+n_2cos\theta_i}\rvert^2 = \lvert\frac{n_1\sqrt{1-(\frac{n_1}{n_2}sin\theta_i)^2}-n_2cos\theta_i}{n_1\sqrt{1-(\frac{n_1}{n_2}sin\theta_i)^2}+n_2cos\theta_i}\rvert^2$
+    $R_{eff}=\frac{1}{2}(R_s+R_p)$
+  - 大约：Schlick近似
+    $R(\theta)=R_0+(1-R_0)(1-cos\theta)^5$
+    $R_0=(\frac{n_1-n_2}{n_1+n_2})^2$
