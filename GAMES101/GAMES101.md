@@ -1565,5 +1565,30 @@
     - $F(i,h)$ 菲涅尔项：根据入射方向，有不同程度的反射
     - $G(i,o,h)$ 几何项：微表面的自身互相遮挡。对于接近grazing angle的光线，容易发生自遮挡
     - $D(h)$ 法线分布：任何一个给定方向上，给定的值是多少。给定半程向量，为了计算只有法线方向与半程向量方向相同的时候，才会将入射反射到出射
-    <img src="./image/microfacet_b.png" alt="法线分布集中" width="400px"></img>
-
+    <img src="./image/microfacet_brdf.png" alt="微表面brdf" width="400px"></img>
+### 各项同性与各向异性[Isotropic&Anisotropic]
+- 区别：
+  - 各项同性的法线分布均匀，方向性弱
+  - 各项异性的法线分布不均匀，方向性明显
+  <img src="./image/iso_anisotropic.png" alt="法线分布分散" width="400px"></img>
+- 表现在$BRDFs$上
+  - $f_r(\theta_i,\phi_i;\theta_r,\theta_r) \neq f_r(\theta_i,\theta_r,\phi_r-\phi_i)$
+  - 解释：旋转后入射角与出射角后，看到的是相同的$BRDF$那就是各项同性，反之亦然
+- 各项同性例子
+<img src="./image/isotropic_example1.png" alt="各项同性例子" width="300px"></img>
+- 各项异性例子
+<img src="./image/anisotropic_example1.png" alt="各项异性例子" width="300px"></img>
+<img src="./image/anisotropic_example2.png" alt="各项异性例子" width="300px"></img>
+<img src="./image/anisotropic_example3.png" alt="各项异性例子" width="300px"></img>
+<img src="./image/anisotropic_example4.png" alt="各项异性例子" width="300px"></img>
+<img src="./image/anisotropic_example5.png" alt="各项异性例子" width="300px"></img>
+- $BRDFs$性质
+  - 能量非负：$f_r(\omega_i\rightarrow\omega_r)\ge0$
+  - 线性：$L_r(p, \omega_r)=\int^{H^2}f_r(p,\omega_i\rightarrow\omega_r)L_i(p,\omega_r)cos\theta_id\omega_i$
+  <img src="./image/brdfs_linear.png" alt="brdfs的线性" width="300px"></img>
+  - 可逆性[reciprocity]：$f_r(\omega_r\rightarrow\omega_i)=f_r(\omega_i\rightarrow\omega_r)$
+  <img src="./image/brdfs_reciprocity.png" alt="brdfs的可逆性" width="300px"></img>
+  - 能量守恒: $\forall\omega_r\int_{H^2}(\omega_i\rightarrow\omega_r)cos\theta_id\omega_i\le1$
+  - 如果为各向同性：$f_r(\theta_i,\phi_i;\theta_r,\theta_r) = f_r(\theta_i,\theta_r,\phi_r-\phi_i)$
+    由于可逆性：$f_r(\theta_i,\theta_r,\phi_r-\phi_i) = f_r(\theta_r,\theta_i,\phi_i-\phi_r) = f_r(\theta_i,\theta_r,|\phi_r-\phi_i|)$
+    <img src="./image/isotropic_prop.png" alt="各项同性的推导公式" width="300px"></img>
