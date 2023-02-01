@@ -1548,3 +1548,22 @@
   - 大约：Schlick近似
     $R(\theta)=R_0+(1-R_0)(1-cos\theta)^5$
     $R_0=(\frac{n_1-n_2}{n_1+n_2})^2$
+
+### 微表面「Microfacet」
+- 离物体足够远的时候，就看不到其中的细节。我们只能看到物体对表面的作用
+- 从远处看，看到材质与外观
+  从近处看，看到的是几何
+- 每个微表面都有自己的法线
+- 微表面brdf模型
+  - 微表面上的法线分布
+    - 集中的 $\Leftrightarrow$ glossy
+    <img src="./image/microfacet_concentrated.png" alt="法线分布集中" width="400px"></img>
+    - 分散的 $\Leftrightarrow$ 漫反射材质
+    <img src="./image/microfacet_spread.png" alt="法线分布分散" width="400px"></img>
+  - brdf计算
+    - $f(i, o)= \frac{F(i,h)G(i,o,h)D(h)}{4(n,i)(n,o)}$
+    - $F(i,h)$ 菲涅尔项：根据入射方向，有不同程度的反射
+    - $G(i,o,h)$ 几何项：微表面的自身互相遮挡。对于接近grazing angle的光线，容易发生自遮挡
+    - $D(h)$ 法线分布：任何一个给定方向上，给定的值是多少。给定半程向量，为了计算只有法线方向与半程向量方向相同的时候，才会将入射反射到出射
+    <img src="./image/microfacet_b.png" alt="法线分布集中" width="400px"></img>
+
