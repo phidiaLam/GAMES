@@ -1575,13 +1575,13 @@
   - $f_r(\theta_i,\phi_i;\theta_r,\theta_r) \neq f_r(\theta_i,\theta_r,\phi_r-\phi_i)$
   - 解释：旋转后入射角与出射角后，看到的是相同的$BRDF$那就是各项同性，反之亦然
 - 各项同性例子
-<img src="./image/isotropic_example1.png" alt="各项同性例子" width="300px"></img>
+  <img src="./image/isotropic_example1.png" alt="各项同性例子" width="300px"></img>
 - 各项异性例子
-<img src="./image/anisotropic_example1.png" alt="各项异性例子" width="300px"></img>
-<img src="./image/anisotropic_example2.png" alt="各项异性例子" width="300px"></img>
-<img src="./image/anisotropic_example3.png" alt="各项异性例子" width="300px"></img>
-<img src="./image/anisotropic_example4.png" alt="各项异性例子" width="300px"></img>
-<img src="./image/anisotropic_example5.png" alt="各项异性例子" width="300px"></img>
+  <img src="./image/anisotropic_example1.png" alt="各项异性例子" width="300px"></img>
+  <img src="./image/anisotropic_example2.png" alt="各项异性例子" width="300px"></img>
+  <img src="./image/anisotropic_example3.png" alt="各项异性例子" width="300px"></img>
+  <img src="./image/anisotropic_example4.png" alt="各项异性例子" width="300px"></img>
+  <img src="./image/anisotropic_example5.png" alt="各项异性例子" width="300px"></img>
 - $BRDFs$性质
   - 能量非负：$f_r(\omega_i\rightarrow\omega_r)\ge0$
   - 线性：$L_r(p, \omega_r)=\int^{H^2}f_r(p,\omega_i\rightarrow\omega_r)L_i(p,\omega_r)cos\theta_id\omega_i$
@@ -1592,3 +1592,23 @@
   - 如果为各向同性：$f_r(\theta_i,\phi_i;\theta_r,\theta_r) = f_r(\theta_i,\theta_r,\phi_r-\phi_i)$
     由于可逆性：$f_r(\theta_i,\theta_r,\phi_r-\phi_i) = f_r(\theta_r,\theta_i,\phi_i-\phi_r) = f_r(\theta_i,\theta_r,|\phi_r-\phi_i|)$
     <img src="./image/isotropic_prop.png" alt="各项同性的推导公式" width="300px"></img>
+### 测量$BRFDs$
+- 基础操作
+  <img src="./image/brdfs_measure.png" alt="测量brdfs" width="300px"></img>
+- 一般操作
+  ```
+  foreach outgoing direction wo
+    move light to illuminate surface with a thin beam from wo
+    for each incoming direction wi
+      move sensor to be at direction wi from surface
+      measure incident radiance
+  ```
+- 优化计算
+  - 如果各项异性，可以从4D减到3D(4D指，相机两个方向移动，光源两个方向移动)
+  - 根据可逆性，可以砍掉一半的计算量
+  - 采样若干方向，猜出来等等
+- 存储
+  - 压缩
+  - 神经网络等等
+- 扩展
+  - 有名BRDF材质库：MERL
