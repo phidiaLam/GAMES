@@ -1612,3 +1612,33 @@
   - 神经网络等等
 - 扩展
   - 有名BRDF材质库：MERL
+
+## 渲染中的高级话题
+### 高级的光线传输
+- 无偏的光线传播方法
+  - Bidirectional path tracing(BDPT) 双向路径追踪
+  - Metropolis light transport(MLT) 梅特罗波利斯光传输
+- 有偏的光线传播方法
+  - Photon mapping 光子映射
+  - Vertex connection and merging(VCM) 光子映射与双向路径追踪的结合
+- 即时辐射度算法
+  - VPL
+  - ...
+### 有偏[biased]与无偏[unbiased]
+- 无偏
+  - 无偏的蒙特卡洛方法不会有任何的系统误差，无论使用多少个样本，期望得出来的估计值永远是积分的情况
+- 有偏
+  - 估计出来的值它的期望与最终得到的值不同，就是有偏的
+  - 特殊的有偏估计——consistent：当取样无穷大时没有系统误差
+### 双向路径追踪
+- 过程：
+  1. 从光源与摄像机同时打出一条子路径
+  2. 将两个子路径的末尾连接起来
+  <img src="./image/bdpt.png" alt="bdpt" width="300px"></img>
+- 适合场景  
+  - 在光源一侧具有复杂的光线传播
+  - 例子：
+  <img src="./image/bidirectional_example.png" alt="双向路径追踪例子" width="300px"></img>
+- 缺点
+  - 难以实现
+  - 计算速度慢
