@@ -1706,7 +1706,136 @@
   - 头发/毛发/纤维（BCSDF）
   - 颗粒材质——沙子
 - 表面模型
-  - 半透明材料（BSSRDF）
+  - 半透明材料（BSSRDF）[Translucent Material] 翻译不合理，类似毛玻璃
   - 布料
   - 复杂材质（非统计BRDF）
 - 程序生成外观
+#### 散射介质/参与介质[Participating Media]
+- 例子：雾、云等
+- 定义：当一个光在行进的过程中穿过散射介质，光线在一个点上会被散射到其他方向上去，也会收到其他方向的散射，并且会被吸收[例如乌云]
+  <img src="./image/participating_media.png" alt="散射介质" width="600px"></img>
+- 由相位函数[parse function]来描述光线在参与介质中任意点的散射
+  <img src="./image/phase_function.png" alt="相位函数" width="600px"></img>
+- 渲染过程
+  - 随机选择弹跳方向
+  - 随机选择弹跳后光线走的距离
+  - 将每个着色点连接光线
+   <img src="./image/participating_media_rendering.png" alt="散射介质渲染过程" width="600px"></img>
+#### 头发材质
+- 头发：
+  <img src="./image/hair.png" alt="头发" width="600px"></img>
+  - 在头发中，有着两种高光
+    - 无色的，稍微发白
+    - 有设的
+- Kajiya-Key模型
+  - 光线被分为两个部分，一个是部分反射高光，另一个是散射
+  <img src="./image/kajiya_key.png" alt="Kajiya-Key模型" width="400px"></img>
+  - 效果
+  <img src="./image/kajiya_key_result.png" alt="Kajiya-Key效果" width="400px"></img>
+- Marschner模型
+  - 光线被分为三个部分
+    - 发生反射（R）
+    - 发生两次折射，因为在头发内要穿透两次（TT）
+    - 光线进入头发，在头发内壁反射再往回走（TRT）
+  <img src="./image/marschner.png" alt="Marschner模型" width="400px"></img>
+  - 效果
+  <img src="./image/marschner_result.png" alt="Marschner效果" width="400px"></img>
+  - 缺点：
+   - 不适用于动物毛发：
+    <img src="./image/human_hair_and_animal_fur.png" alt="头发与毛发对比" width="600px"></img>
+    - Marschner模型并不适用于动物毛发，会使得毛发比较暗，与真实效果不同
+    - 头发与毛发都是由三层构成
+      - Cuticle 表皮
+      - Cortex
+        - 能吸收光
+      - Medulla 髓质
+        - 如同进入反射介质
+      <img src="./image/fiber_struct.png" alt="毛发结构" width="300px"></img>
+    - 动物毛发的髓质比人体头发的髓质大很多，所以反射效果明显
+      <img src="./image/hair_fur_diff.png" alt="头发与毛发区别" width="200px"></img>
+    - 不断加大髓质的大小，就可以看到效果的变换
+      <img src="./image/medulla_size.png" alt="髓质大小" width="400px"></img>
+- Double Cylinder Model 双层圆柱模型
+  - 基于Marschner模型在增加两个分量（$TT^s、TRT^s$）
+    - 光线在毛发上反射，得到反射分量$R$
+    - 光线在透过毛发，没有经过髓质的发散[或没有发生散射]后射出，得到$TT$
+    - 光线在透过毛发，没有经过髓质的发散[或没有发生散射]后反射射出，得到$TRT$
+    - 光线在透过毛发，经过髓质的发散后射出，得到$TT^s$
+    - 光线在透过毛发，经过髓质的发散后反射射出，得到$TRT^s$
+  <img src="./image/double_cylinder.png" alt="双层圆柱模型" width="600px"></img>
+  <img src="./image/double_cylinder_five.png" alt="双层圆柱模型" width="600px"></img>
+#### 颗粒材质 Granular Material
+- 定义：离散固体、宏观粒子的聚集体，其特征是每当粒子相互作用时就会损失能量
+  brdf_bssrdf
+- 目前没有很好的解决，渲染一张需要花费很长的时间
+
+#### Translucent Material 半透明材质
+- 例子：玉石、水母
+- 次表面散射[Subsurface Scattering]
+  - 定义：光线从一个点进入一个表面，在底下进行大量的反射再钻出去
+  - BSSRDF：
+    - 对BRDF的延伸
+    - 从一个点进入，可以从任何方向进入，再从另一个点出去并且也可以是任意方向的
+    - 符合表示：$S(x_i,\omega_i,x_o,\omega_o)$
+    - 渲染方程：$L(x_o,\omega_o)=\int_A\int_{H^2}S(x_i,\omega_i,x_o,\omega_o)L_i(x_i,\omega_i)cos\theta_i d\omega_i dA$
+    <img src="./image/brdf_bssrdf.png" alt="brdf与bssrdf" width="600px"></img>
+  - Dipole近似
+    - 使用物体底下一个光源与对应上方一个光源，两个光源可以达成近似次表面散射的效果
+  - 例子：
+    <img src="./image/subsurface_scattering_example1.png" alt="次表面散射例子" width="200px"></img>
+    <img src="./image/subsurface_scattering_example2.png" alt="次表面散射例子" width="400px"></img>
+#### 布料
+- 定义：布料是一系列缠绕[twist]的纤维组成
+- 两级缠绕
+  - 由最细小的纤维(羊毛)，缠绕成股[Ply]
+  - 再由股缠绕成线
+- 编织[woven]与针织[knitted]
+  <img src="./image/knitted_woven.png" alt="针织与编织" width="400px"></img>
+- 通过针织、编织，图案形状，如何压层来生成BRDF模型来计算
+  <img src="./image/woven_model.png" alt="压层" width="400px"></img>
+- 当做参与介质进行渲染：一些特殊材质，如天鹅绒，它并不是编织或针织在一个平面上，而是有很多竖直的纤维。在渲染的时候，我们当它在空间中，如同云朵一样进行渲染，而不是把它当成纤维进行渲染
+- 当做真实纤维进行渲染：把每一根纤维渲染出来，渲染效果真实，但是计算量爆炸
+
+#### 有细节的材质
+- 很多渲染出来的效果过于完美，但是生活中，并不会是如此完美的效果
+  - 渲染：车的表面光滑，鼠标高光均匀，没有颗粒感
+    <img src="./image/rendered_not_realistic.png" alt="渲染看上去不真实" width="400px"></img>
+  - 现实：车因为与灰尘摩擦形成划痕，在光线照射下有如蜘蛛网的感觉。鼠标高光则有些颗粒感
+    <img src="./image/real_complicated.png" alt="真实物体是复杂的" width="400px"></img>
+- 在微表面模型中
+  - $f(i, o)= \frac{F(i,h)G(i,o,h)D(h)}{4(n,i)(n,o)}$
+  - 关键点$D(h)$描述了微表面法线的分布，在之前采用的是一个正态的分布。但是我们要一个基本符合正态分布，但是又有扰动的，这样子可以更好的体现出更多的细节
+    <img src="./image/actual_ndf.png" alt="真实的ndf" width="400px"></img>
+- 缺点：耗费大量时间
+  - 2小时还是不能达到想要的效果，经过计算，差不多要21.3天以上才能达到
+  <img src="./image/detail_rendering.png" alt="细节渲染耗时" width="600px"></img>
+  - 原因：
+    - 在微表面中，无论是相机向物体发射光线或者是光源向物体发射光线，反射的结果都很难找到彼此  
+    <img src="./image/difficult_path_sampling.png" alt="路径采样的困难" width="500px"></img>
+  - 解决
+    - 考虑一个像素覆盖的很多的微表面，然后获得该覆盖范围内法线的分布，然后用到微表面模型里
+    <img src="./image/difficult_path_sampling_solution.png" alt="路径采样的困难解决" width="500px"></img>
+- p-NDFs
+  <img src="./image/p_NDFs_1.png" alt="不同法线分布" width="500px"></img>
+  <img src="./image/p_NDFs_2.png" alt="不同法线分布" width="500px"></img>
+- 以上就完全解决了吗？不
+  - 如果微表面细小到一定程度，小到物体与光线波长相当，我们就不能考虑光线延直线传播，而是一个波
+  <img src="./image/wave_optics.png" alt="物体细小到光线波长" width="500px"></img>
+  - 例子：
+    - mac电脑在只有一个光源的情况下，凑近看，可以看到很多的不同颜色
+    <img src="./image/wave_optics_example.png" alt="物体细小到光线波长例子" width="500px"></img>
+  - 波动光学计算：
+    - 过于复杂，这边看下结果
+    - 在复数域上做各种各样的积分
+    <img src="./image/wave_optics_calc.png" alt="波动光学计算" width="500px"></img>
+    - 渲染结果：
+      <img src="./image/wave_optics_result.png" alt="波动光学渲染结果" width="500px"></img>
+#### 程序生成外观 Procedural Appearance
+- 定义：用一定的方式来指导它的生成，而不需要真正的去生成它，可以动态的去查询它
+- 例子：比如一个花瓶在摔碎后的切面，如果使用三维的纹理去存储的话，存储量将会爆炸。那我们只要在摔碎后，通过函数动态的去生成它。
+- 噪声函数：一个空间中的函数， 我给定一个x,y,z，就可以返回一个值
+  - 例子：比如当noise(x,y,z)>threshold时，反射为1，反之为0。这种二值化处理
+      
+
+
+
