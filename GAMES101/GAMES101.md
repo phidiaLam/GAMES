@@ -1836,6 +1836,52 @@
 - 噪声函数：一个空间中的函数， 我给定一个x,y,z，就可以返回一个值
   - 例子：比如当noise(x,y,z)>threshold时，反射为1，反之为0。这种二值化处理
       
-
-
+## 相机、棱镜与光场
+### 相机
+- 相机构造
+  <img src="./image/nikon.png" alt="相机截面图" width="500px"></img>
+- 传感器上记录的点都是irradiance，目前有人在研究不同方向的光线分开记录，从而记录radiance
+#### 针孔相机
+- 利用小孔成像的原理
+- 针孔相机不会有虚化，全部都是很清楚的图像
+#### 视场 [Field of View]
+- 定义：能看到多大的范围
+- 决定视场的因素
+  - 传感器高度h
+  - 焦距f
+    <img src="./image/fov.png" alt="视场" width="600px"></img>
+- $FOV=2arctan(\frac{h}{2f})$
+- 一般情况下，人们以大小为35mm(36x24mm)的胶片为基准，定义焦距，从而说明视场大小
+  - 17mm焦距对应广角的104°视场
+  - 50mm焦距对应普遍的47°视场
+  - 200mm焦距对应微距的12°视场
+- 同样的焦距情况，传感器与视场大小成正比
+#### 曝光 [Exposure]
+- 公式：$H = T \times E$
+   &nbsp;&nbsp;&nbsp;$Exposure = Time \times Irrandience$
+- 曝光时间：通过快门控制
+- 曝光光照：
+  - 落在单位感光元件上的能量
+  - 可能被光圈大小以及焦距所影响
+  <img src="./image/exposure_affect.png" alt="曝光影响因素" width="600px"></img>
+- 光圈的大小（Aperture size）
+  - 通过改变f-stop来控制光线多少进入
+  - F-Number(F-Stop): 曝光等级
+    - 表示：FN 或 F/N [N是f-number]
+  - 大光圈浅景深
+  <img src="./image/f_stop.png" alt="光圈" width="600px"></img>
+- 快门 （Shutter Speed）
+  - 快门开放的时间，速度越快，光线进来越少
+  - 机械门快速开关
+  <img src="./image/shutter_speed.png" alt="快门" width="400px"></img>
+  - 运动模糊
+    - 在快门打开的这段时间内，物体产生了移动。所以产生了模糊。在不同的时间对物体进行采样
+    - 运动模糊可以带给能一种速度感
+    <img src="./image/motion_blur.png" alt="运动模糊" width="600px"></img>
+  - 果冻效应（Rolling shutter）
+    - 物体运动速度大于等于机械快门开关速度，进而导致快门在关闭过程中，记录的是不同时间进入的光
+    <img src="./image/rolling_shutter.png" alt="果冻响应" width="400px"></img>
+- ISO gain（感光度）
+  - 后期处理，接受到多少光就是多少光。简单理解就是最终结果乘上一个数
+  <img src="./image/iso.png" alt="感光度" width="600px"></img>
 
