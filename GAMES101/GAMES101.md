@@ -1919,3 +1919,20 @@
     2. 在透镜平面随机采样点$x''$
     3. 已知物距、相距、透镜参数，根据透镜公式，就可以计算出物体平面上的点$x'''$
     4. 这样子就可以知道 $x''\rightarrow x'''$ 这条光线的radiance记录到$x'$这个点上
+- 景深
+  - 光圈大小会影响模糊的范围
+    <img src="./image/depth_of_field_aperture.png" alt="光圈对景深的影响" width="400px"></img>
+  - 成像平面在离线的焦点附近的一段区域，我们认为其coc都是足够小的，这段区域内能获得清晰的场景
+    <img src="./image/coc_depth_of_field.png" alt="景深与coc的关系" width="400px"></img>
+    - 场景内一段距离深度经过透镜到达成像平面附近的coc足够小
+    <img src="./image/fyi.png" alt="景深与coc的关系" width="400px"></img>
+    - 推导：
+      - $\frac{d_N-d_S}{d_N}=\frac{C}{A}$
+      - $\frac{d_S-d_F}{d_S}=\frac{C}{A}$
+      - $N=\frac{f}{A}$
+      - $\frac{1}{D_F}+\frac{1}{d_F}=\frac{1}{f}$
+      - $\frac{1}{D_S}+\frac{1}{d_S}=\frac{1}{f}$
+      - $\frac{1}{D_N}+\frac{1}{d_N}=\frac{1}{f}$
+      - $DOF = D_F - D_N$
+      - $D_F=\frac{D_sf^2}{f^2-NC(D_S-f)}$
+      - $D_F=\frac{D_sf^2}{f^2+NC(D_S-f)}$
