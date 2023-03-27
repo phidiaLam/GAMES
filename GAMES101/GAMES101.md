@@ -1836,7 +1836,7 @@
 - 噪声函数：一个空间中的函数， 我给定一个x,y,z，就可以返回一个值
   - 例子：比如当noise(x,y,z)>threshold时，反射为1，反之为0。这种二值化处理
       
-## 相机、棱镜与光场
+## 相机、透镜与光场
 ### 相机
 - 相机构造
   <img src="./image/nikon.png" alt="相机截面图" width="500px"></img>
@@ -1867,6 +1867,7 @@
 - 光圈的大小（Aperture size）
   - 通过改变f-stop来控制光线多少进入
   - F-Number(F-Stop): 曝光等级
+    - 定义：焦距除于光圈直径
     - 表示：FN 或 F/N [N是f-number]
   - 大光圈浅景深
   <img src="./image/f_stop.png" alt="光圈" width="600px"></img>
@@ -1885,3 +1886,36 @@
   - 后期处理，接受到多少光就是多少光。简单理解就是最终结果乘上一个数
   <img src="./image/iso.png" alt="感光度" width="600px"></img>
 
+#### 镜头
+##### 薄透镜
+- 理想化的薄透镜
+  - 平行光穿过透镜后会交于一个焦点[focal point]
+  - 过焦点的光线透过透镜会重新变成平行光
+  - 薄的透镜可以任意改变它的焦距（在现实中，透过透镜组来模拟一个可变焦距的薄透镜）
+  <img src="./image/ideal_thin_lens.png" alt="薄透镜" width="400px"></img>
+- 薄透镜公式
+  - 物距：$z_o$
+  - 相距：$z_i$
+  <img src="./image/thin_lens_equation.png" alt="薄透镜公式" width="600px"></img>
+  - $\frac{1}{f}=\frac{1}{z_i}+\frac{1}{z_o}$ (利用相似三角形推导，这里不多赘述)
+- 离焦模糊[Defocus Blur]
+  - Circle of Confusion(COC)
+    - 解释：
+      - C为成像平面，Focal Plane的物体会清楚的呈现在成像平面上
+      - 如果物体不在平面上，如图中Object，$z_i$相距在成像平面前，物体会在成像平面会变的模糊
+    <img src="./image/coc.png" alt="coc" width="400px"></img>
+    - 公式：$\frac{C}{A}=\frac{d'}{z_i}=\frac{|z_S-z_i|}{z_i}$ 根据相似三角形求得
+    - 弥散圈与孔径大小成正比
+      <img src="./image/coc_aperture.png" alt="coc与光圈大小" width="400px"></img>
+    - 又因为F-Number为焦距除于光圈直径，所以 $C=A\frac{|z_s-z_i|}{z_i}=\frac{f}{N}\frac{|z_s-z_i|}{z_i}$
+- 薄透镜的光线追踪
+  <img src="./image/ray_tracing_thin_lens.png" alt="薄透镜的光线追踪" width="400px"></img>
+  - 定义场景（其中一种）
+    - 定义传感器大小，透镜焦距与光圈大小
+    - 定义物体与透镜的距离$z_0$
+      - 并且计算可得物距$z_i$
+  - 渲染：
+    1. 先找每个在传感器上的像素$x'$
+    2. 在透镜平面随机采样点$x''$
+    3. 已知物距、相距、透镜参数，根据透镜公式，就可以计算出物体平面上的点$x'''$
+    4. 这样子就可以知道 $x''\rightarrow x'''$ 这条光线的radiance记录到$x'$这个点上
