@@ -1936,3 +1936,93 @@
       - $DOF = D_F - D_N$
       - $D_F=\frac{D_sf^2}{f^2-NC(D_S-f)}$
       - $D_F=\frac{D_sf^2}{f^2+NC(D_S-f)}$
+### 光场[Light Field\Lumigraph]
+- 我们所看到的世界
+  - 在这个场景中，人可以看到场景中真实的物品
+  <img src="./image/world1.png" alt="眼中世界" width="400px"></img>
+  - 当面前挡了一块幕布，在幕布上有着前面真实物品在幕布位置的投影。人们还是可以看到如同真实场景一般，这也是vr眼睛的原理
+  <img src="./image/world2.png" alt="眼中世界" width="400px"></img>
+#### 全光函数[The Plenoptic Function]
+  - 定义：描述光场的数学模型，指我们所能看到的所有东西
+  - 简单全光函数
+    - 公式：$P(\theta,\phi)$
+    - 解释：我往任意一个方向上去看，我可以看到什么样的值
+    <img src="./image/the_plenoptic_function1.png" alt="全光函数" width="400px"></img>
+  - 改进：引入波长
+    - 公式：$P(\theta,\phi，\lambda)$
+    - 解释：记录光线波长从而得到有颜色的画面
+    <img src="./image/the_plenoptic_function2.png" alt="全光函数" width="400px"></img>
+  - 改进：引入时间
+    - 公式：$P(\theta,\phi，\lambda, t)$
+    - 解释：记录不同时间下任意方向的值，如同电影一样
+  - 改进：摄像机位置
+    - 公式：$P(\theta,\phi，\lambda, t, V_X, V_Y, V_Z)$
+    - 解释：记录任意位置，摄像机在场景中可以移动，如全息电影
+    <img src="./image/the_plenoptic_function3.png" alt="全光函数" width="400px"></img>
+  - 整个世界目前就可以通过这七个维度来表示
+#### 光线
+- 第一种定义
+  - 5D
+    - 3D position
+    - 2D direction
+    <img src="./image/5d_ray.png" alt="5d方式表示光线" width="400px"></img>
+- 第二种定义
+   - 4D[下面解释为什么是两个二维的]
+    - 2D position
+    - 2D direction
+    <img src="./image/4d_ray.png" alt="4d方式表示光线" width="400px"></img>
+
+#### 光场
+- 描述物体被看到所有情况
+  - 物体放在包围盒中，从任何方向看向物体。通过光路的可逆性，也可以描述物体能被看到的所有情况
+  - 有个发光函数，记录了表面不同的点向不同的方向发射光的情况
+  - 光场是任何一个位置去往任何一个方向光的强度
+  - 所以光场就是全光函数的一小部分，只是二维的位置与二维的方向
+    <img src="./image/plenoptic_surface.png" alt="全光面" width="400px"></img>
+  - 根据之前的纹理映射，3D物体的表面其实是在一个二维空间中的
+    - 二维的$uv$来表示位置
+    - 任何一个空间中的方向都可以用 $\theta, \phi$ 表示
+- 光场的表示
+  1. 物体
+      - 假设摄像机放在左边的紫色点上，通过往物体不同位置看，就会得到不同的光线
+      - 因为光场记录了往任意方向的光线，所以从任意位置往物体光场看都可以知道能看到什么
+        <img src="./image/object_light_field.png" alt="物体光场" width="400px"></img>
+      - 结论：有了光场后，能得到任意位置往物体任意方向的结果
+  2. 幕布[包围盒]
+      - 物体放在一个包围盒子里面
+      - 无需关心光场表示的是什么物体，只需要知道在物体表面任何位置任何方向过去的光线
+        <img src="./image/lumigraph_curtain.png" alt="幕布中的光场" width="400px"></img>
+      - 更进一步：
+        - 采用一个平面与两个角度（三维情况下）来定义一个光场
+          <img src="./image/lumigraph_def1.png" alt="定义光场——平面+方向" width="400px"></img>
+        - 采用两个平面来定义一个光场
+          <img src="./image/lumigraph_def2.png" alt="定义光场——双平面" width="400px"></img>
+          - 两个平面上的点分别用$uv$与$st$来表示
+- $uv$、$st$平面理解方式
+  1. 从$uv$平面取一个点，看向$st$整个面
+      <img src="./image/uv_st.png" alt="uv看向st" width="600px"></img>
+      - 例如斯坦福大学做的相机阵列
+      <img src="./image/camera_matrix.png" alt="相机阵列" width="200px"></img>
+  2. 从$st$平面取一个点，看向$uv$整个面
+      - 从$uv$上的点看向$st$上的同一个点，就可以知道一个物体的一个位置不同方向看到的是什么
+      <img src="./image/st_uv.png" alt="st看向uv" width="600px"></img>
+      - 积分图像：
+        - 现实例子：苍蝇的复眼
+        <img src="./image/fly.png" alt="苍蝇的复眼" width="300px"></img>
+        - 以往的传感器在小透镜[lenslet]那层，而积分图像，将传感器向后移动，并且分成多个区域，再利用透镜将不同方向的光打到后面传感器的不同位置。这样子对于每个像素来讲，就可以知道光来自的不同方向
+        <img src="./image/integral_imaging.png" alt="积分图像" width="300px"></img>
+      - 光场相机：
+        - 利用以上原理，由UC berkeley的Prof. Ren Ng做出光场相机
+        - 光场相机可以再照完照片后，对光圈打到进行调节
+        - 光场摄像机储存的信息：
+          <img src="./image/light_field_camera_info.png" alt="光场摄像机储存的信息" width="300px"></img>
+        - 如何得到一个普通的照片？
+          - 对于每个像素，取同一方向的光线作为该像素的记录值
+          - 这就等同于用一个普通相机往光线方向进行记录
+          <img src="./image/light_field_camera_info.png" alt="光场摄像机储存的信息" width="300px"></img>
+          - 效果：可以通过一次照相，实现往多种角度的拍摄，既虚拟的移动摄像机的位置
+        - 总结：
+          - 光场摄像机记录了整个光场信息
+        - 问题：
+          - 光场摄像机通常有分辨率不足的问题，因为比如同等胶片，原本一个像素记录一个像素的信息，现在可能100个像素记录一个像素信息。并且这也导致了光场摄像机的高成本
+          - 需要记录更精密的方向信息，记录的方向就少了
