@@ -2019,10 +2019,116 @@
         - 如何得到一个普通的照片？
           - 对于每个像素，取同一方向的光线作为该像素的记录值
           - 这就等同于用一个普通相机往光线方向进行记录
-          <img src="./image/light_field_camera_info.png" alt="光场摄像机储存的信息" width="300px"></img>
+          <img src="./image/light_field_camera.png" alt="光场摄像机" width="100px"></img>
           - 效果：可以通过一次照相，实现往多种角度的拍摄，既虚拟的移动摄像机的位置
         - 总结：
           - 光场摄像机记录了整个光场信息
         - 问题：
           - 光场摄像机通常有分辨率不足的问题，因为比如同等胶片，原本一个像素记录一个像素的信息，现在可能100个像素记录一个像素信息。并且这也导致了光场摄像机的高成本
           - 需要记录更精密的方向信息，记录的方向就少了
+
+### 颜色
+#### 基于物理的颜色
+- 牛顿做实验发现光线在传过棱镜后会折射成不同颜色，不同颜色合成后会形成白色
+- 光谱[谱功率密度（Spectral Power Distribution）]
+  - 定义：光线的能量在不同的波长上分布
+  - 例子：
+    - 不同颜色对应不同的谱功率的分布
+    <img src="./image/spd_example.png" alt="谱功率密度例子" width="300px"></img>
+- 颜色其实是人类的感知，它并不是光的普遍属性
+- 不同波长的光并不是颜色
+#### 基于生物学的颜色 
+- 眼球
+  - 瞳孔相当于光圈
+  - 眼球晶状体相当于单透镜，通过肌肉调节焦距
+  - 看到的信息会成像于视网膜表面
+  - <img src="./image/human_eye.png" alt="人体眼睛" width="300px"></img>
+  - 视网膜上的感光细胞
+    <img src="./image/retinal_photorecetor_cells.png" alt="感光细胞" width="300px"></img>
+    - 棒状细胞[Rods]
+      - 数量多 约12千万
+      - 感受光线强度
+      - 不感受颜色
+    - 锥形细胞[Cones]
+      - 数量极少 约6-7百万
+      - 感受颜色
+      - 锥形细胞又分成三种：S、M、L，分别对应短、中、长的波长
+        <img src="./image/cones.png" alt="锥形细胞" width="600px"></img>
+        - 计算：对应波长光线强度积分
+          - $S=\int r_S(\lambda)s(\lambda)d\lambda$ 
+          - $M=\int r_M(\lambda)s(\lambda)d\lambda$ 
+          - $L=\int r_L(\lambda)s(\lambda)d\lambda$ 
+        - 人们看到的其实是3个数字，并不能看到光谱
+- 同色异谱 [Metamerism]
+  - 说明：不同的色谱，给人们呈现同样的颜色
+  - 原因：因为光谱进入眼睛后，要经历积分得到SML三个数值
+- 加色系统
+  - 主要颜色的分布，$S_R(\lambda)、S_G(\lambda)、S_B(\lambda)$
+  - 最终颜色：$R_{S_R(\lambda)}+G_{S_G(\lambda)}+B_{S_B(\lambda)}$ 强度x对应颜色分布，得到最终颜色$RGB$
+  - 减色系统：在绘画中，红黄蓝三个颜色混合起来是黑色，这是减色系统
+  - 加色系统实验
+    - 加色系统实装置
+    <img src="./image/additive_color_matching_experiment.png" alt="加色系统实装置" width="600px"></img>
+    - 少数情况下，会出现，一种颜色已经是0了，但是还是没有办法达到想要的想过
+      <img src="./image/add_color_ex1.png" alt="加色系统实装置" width="400px"></img>
+      <img src="./image/add_color_ex2.png" alt="加色系统实装置" width="400px"></img>
+      - 通过对要匹配的系统加色，来达到右边减色的效果
+    - CIE RGB 颜色匹配
+      - 通过RGB的三基色刺激值来去合成不同波长的光线
+      <img src="./image/add_color_ex2.png" alt="加色系统实装置" width="500px"></img>
+      - 计算：
+        - $R_{CIE RGB}=\int_{\lambda}s(\lambda)\bar{r}(\lambda)d\lambda$
+        - $G_{CIE RGB}=\int_{\lambda}s(\lambda)\bar{g}(\lambda)d\lambda$
+        - $B_{CIE RGB}=\int_{\lambda}s(\lambda)\bar{b}(\lambda)d\lambda$
+#### 颜色空间
+- 标准RGB[sRGB]
+  - 选定一个特定的显示器成为RGB的标准，其他色彩校验设备通过校准来模拟该显示器，至今广泛使用
+  - 色域是有限的
+- CIE XYZ系统
+  - 规则：
+    - 规定$X$，$Z$两原色只代表色度（颜色中红色和蓝色的比例），没有亮度。光度量只与三刺激值$Y$ 成比例。  $XZ$线称为无亮度线。
+    - 新的三原色$X$，$Y$，$Z$连成的三角形要包含光迹曲线。
+    - 光谱轨迹从 540nm 附近至 700nm，在 RGB 色品图上基本是一段直线，用这段线上的两个颜色相混合可以得到两色之间的各种光谱色，新的 $XYZ$ 三角形的 $XY$ 边应与这段直线重合，因为在这段线上光谱轨迹只涉及$X$原色和$Y$原色的变化，不涉及$Z$原色。
+  - 显示：
+    - 原本位于三维坐标中
+    - 利用归一化：
+      - $x=\frac{X}{X+Y+Z}$
+      - $y=\frac{Y}{X+Y+Z}$
+      - $z=\frac{Z}{X+Y+Z}$
+      - 使得$x+y+z=1$，这样子我们只要记录两个值就可以知道第三个
+        - 通常我们选择x和y去组成一个有特殊亮度Y的坐标
+    <img src="./image/cie_xyz.png" alt="加色系统实装置" width="400px"></img>
+- 更多的色域
+  - 不同的色域对应着不同范围的颜色
+    <img src="./image/gamut.png" alt="加色系统实装置" width="600px"></img>
+- 更多颜色空间
+  - HSV颜色空间（Hue-Saturation—Value）
+    - 常用于颜色选择器上
+    - <img src="./image/hsv.png" alt="hsv颜色空间" width="400px"></img>
+    - HSV
+      - Hue[色调]
+        - 通过色调选颜色
+      - Saturation[饱和度]
+        - 通过饱和度选偏白还是偏颜色
+      - Lightness(or Value)[亮度]
+        - 通过亮度选择是否偏黑
+  - CIELAB颜色空间（AKA L*a*b*）
+    - L*代表亮度
+    - a*和b*的两端为互补色
+      - a*从红到女
+      - b*从黄到蓝
+    <img src="./image/cielab.png" alt="cielab颜色空间" width="400px"></img>
+- 颜色的神奇效果
+  - 人能通过视觉暂留看到互补色
+    - 一张反色的图，盯着看一会，切换到白色的就能看到互补色。如果换到一张灰度图，会看到灰度和反色的叠加
+  - 颜色是相对的
+    - 人们会通过相邻的颜色来辨别颜色
+    <img src="./image/color_relative1.png" alt="颜色是相对的" width="400px"></img>
+    <img src="./image/color_relative2.png" alt="颜色是相对的" width="400px"></img>
+- CMYK: 一种典型的减色系统
+  - 颜色分布
+    - Cyan：蓝绿色
+    - Magenta：品红色
+    - Yellow：黄色
+    - Key: 黑色 （带上黑色，打印的时候成本低）
+  - 经常用在打印
