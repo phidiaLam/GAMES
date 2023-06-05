@@ -2132,3 +2132,94 @@
     - Yellow：黄色
     - Key: 黑色 （带上黑色，打印的时候成本低）
   - 经常用在打印
+
+## 动画与模拟与仿真
+- 动画是指给事物带来生命
+  - 是一种交流的工具
+  - 动画只要看起来差不多对，符合美学。不需要完全符合物理
+- 图形学中
+  - 对于建模或者几何的扩展，动画在不同的时间或者帧的变化
+- 输出
+  - 很多的图，按照一个速度按顺序的播放它
+### 动画的历史
+- 公元前3200年，第一个动画，壁画呈现了动的形态
+  <img src="./image/animation_b3200.png" alt="公元前3200年动画" width="400px"></img>
+- 1831年，制作出在圆盘上放置多个连贯的图片，透过一个小区域看转动的圆盘来得到动画
+  <img src="./image/animation_1831.png" alt="1831年动画" width="400px"></img>
+- 1878年，第一个电影用于研究马的奔跑姿态
+  <img src="./image/animation_1878.png" alt="1878年动画" width="400px"></img>
+- 1937年，第一个手绘Feature—Length(>40mins)动画，白雪公主
+  <img src="./image/animation_1937.png" alt="1837年动画" width="400px"></img>
+- 1963年，第一个数字计算机生成的动画
+  <img src="./image/animation_1963.png" alt="1963年动画" width="400px"></img>
+- 1993年，侏罗纪公园开创性将数字恐龙使用到电影中
+  <img src="./image/animation_1993.png" alt="1993年动画" width="400px"></img>
+- 1995年，第一部使用全CG的电影，玩具总动员
+  <img src="./image/animation_1995.png" alt="1995年动画" width="400px"></img>
+- 而后又不断突破
+
+### 关键帧动画
+- 通过例子理解关键帧动画
+  <img src="./image/keyframes.png" alt="关键帧动画" width="600px"></img>
+  - 上图中
+    - 上面三个关键帧表示了人物的主要动作
+    - 下面通过关键帧来填中间的帧（tweens）
+  - 动画师来去创建关键帧
+  - 助理（人或电脑）来创建中间帧
+- 插值
+  <img src="./image/keyframe_interplation.png" alt="插值" width="400px"></img>
+  - 一般线性的插值得不到良好的效果，一般采用平滑的或者可控制的插值
+  <img src="./image/diff_interplation.png" alt="插值" width="600px"></img>
+
+### 物理模拟
+- 牛顿运动定律
+  - F[Force] = m[Mass]a[Acceleration]
+- 只要能模拟出物体所收到的所有的力，就能很好的去显示物体的运动
+#### 质点弹簧系统[Mass Spring System]
+- 一个简单的弹簧
+  <img src="./image/simple_spr
+  ing.png" alt="简单弹簧" width="600px"></img>
+  - 力将各个点拉在一起
+  - 根据胡克定律，强度与位移成正比
+      - $\textbf{f}_{a\rightarrow b} = k_s(\textbf{b}-\textbf{a})$
+      - $\textbf{f}_{b\rightarrow a} = -\textbf{f}_{a\rightarrow b}$
+      - $k_s$是劲度系数
+  - 问题：弹簧不是0长度的，这边理想的弹簧是0长度的
+- 非0长度的弹簧
+  - 公式：$\textbf{f}_{a\rightarrow b} = k_s\frac{\textbf{b}-\textbf{a}}{|\!|\textbf{b}-\textbf{a}|\!|}(|\!|\textbf{b}-\textbf{a}|\!|-l)$
+    - $l$是静置状态下的长度[Rest Length]
+  - 问题：因为势能和动能会不断转换，所以会永远震动下去
+- PS: 在物理仿真中，导数一般采用头上点点来表示
+  - 位移：$\textbf{x}$
+  - 速度：$\dot{\textbf{x}}=\textbf{v}$
+  - 加速度：$\ddot{\textbf{x}}=\textbf{a}$
+- 带有能量损失的弹簧
+  <img src="./image/energy_loss_spring.png" alt="带有能量损失的弹簧" width="200px"></img>
+  - $\textbf{f} = -k_d\dot{b} $
+  - $k_d$是阻尼系数
+  - 对弹簧施加一个相反的粘性阻力，在速度方向上减慢运动
+  - 问题：
+    - 这样子做会导致一个弹簧虽然再拉伸、收缩的时候会减速。但是同时落地的速度也会减慢。这减慢了所有动作
+- 只带内部阻尼的弹簧
+  - $\textbf{f}_\textbf{b} = -k_dk_s\frac{\textbf{b}-\textbf{a}}{|\!|\textbf{b}-\textbf{a}|\!|}\cdot(\dot{\textbf{b}}-\dot{\textbf{a}})\cdot\frac{\textbf{b}-\textbf{a}}{|\!|\textbf{b}-\textbf{a}|\!|} $
+    - $\dot{\textbf{b}}-\dot{\textbf{a}}$：b的相对速度
+    - $\frac{\textbf{b}-\textbf{a}}{|\!|\textbf{b}-\textbf{a}|\!|}\cdot(\dot{\textbf{b}}-\dot{\textbf{a}})$：b的相对速度投影在a到b方向速度的投影，这里是只有a到b方向上的速度会引起弹簧的长度改变。
+    - $\frac{\textbf{b}-\textbf{a}}{|\!|\textbf{b}-\textbf{a}|\!|}$：方向从a到b
+
+#### 弹簧的结构
+- 对现实物理存在的现象进行简化或者抽象
+  <img src="./image/springs_structure.png" alt="弹簧的结构" width="200px"></img>
+- 类似布料的平面模式
+  - 基础：
+    <img src="./image/basic_cloth_spring.png" alt="模拟基础布料结构" width="200px"></img>
+    - 做一个类似纸张的结构，简单的网格状一连
+    - 问题：
+      - 切变：这里结构从两个对角一拉，会影响形状
+      - 布会对抗面外弯曲，无法与纸张相同可以通过对角线。但是这里对折，所有弹簧不会收到任何力，可以轻松对折
+  - 解决切变不正确
+    - 连接每个对角点增加弹簧，这样子在对角拉扯的时候，会受到斜着的弹簧的力
+    <img src="./image/solution_cloth_spring.png" alt="解决切变模拟布料结构" width="200px"></img>
+  - 解决对抗面外弯曲
+    - 上述也解决了对抗对象向的面外弯曲，但是如果沿着一条竖直或横向弹簧对折，则不会受到弹簧的力
+    - 在每个间隔点间增加弹簧以解决问题
+    <img src="./image/final_solution_cloth_spring.png" alt="最终模拟布料结构" width="200px"></img>
