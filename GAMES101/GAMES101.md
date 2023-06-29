@@ -2223,3 +2223,213 @@
     - 上述也解决了对抗对象向的面外弯曲，但是如果沿着一条竖直或横向弹簧对折，则不会受到弹簧的力
     - 在每个间隔点间增加弹簧以解决问题
     <img src="./image/final_solution_cloth_spring.png" alt="最终模拟布料结构" width="200px"></img>
+
+#### 粒子系统
+- 解释：一堆很小很小的东西
+- 建模：把一个个粒子建模出来，并且把所有的力定义出来，力可能来源于粒子之间，可能来源于外部的力：重力、风力等
+- 应用：
+  - 灰尘
+  - 雾
+  - 流体
+- 挑战：
+  - 需要很多的粒子
+  - 可能需要加速结构，之间可能有引力等等
+- 对于每一帧动画
+  - 创建新的粒子（如果需要）
+  - 考虑内部与外部的作用力
+  - 更新粒子的位置与速度
+  - 删除死亡的例子（如果需要）
+  - 渲染粒子
+- 粒子系统的作用力
+  - 吸引力与排斥力
+    - 重力、电磁力...
+    - 弹力、斥力...
+  - 阻尼力
+    - 摩擦力、空气阻力、黏滞力...
+  - 碰撞
+    - 粒子与粒子...
+    - 跟墙面、人物...
+##### 延伸粒子系统（模拟鸟群）     
+- 将每只鸟作为一个粒子
+- 受限于几个简单的力
+  - 来自相邻中心的吸引力
+  - 来自单个相邻的排斥力
+  - 与相邻的平均轨迹对齐
+<img src="./image/simulated_flocking.png" alt="粒子模拟鸟群" width="600px"></img>
+- 可以用作其他复杂系统的模拟，如蜂群、鱼群等等
+
+### 运动学[骨骼]
+#### 正向运动学
+- 清晰的骨架
+  - 拓补（怎么样连接）
+  - 来自关节的几何关系
+  - 树形结构（没有循环）
+- 连接的类型
+  - 钉子[pin] 可以在这个钉住的平面上旋转 1D
+  - 球形[ball] 可以如同看见关节包住球形一样自由旋转 2D
+  - 移动关节[Prismatic joint] 可以移动一段距离
+- 简单的2D双节手臂
+  <img src="./image/2d_two_segment_arm.png" alt="简单的2D双节手臂" width="400px"></img>
+  - 对于尖端点$p$
+    - $p_z = l_1cos(\theta_1)+l_2cos(\theta_1+\theta_2)$
+    - $p_x = l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2)$
+- 优缺点
+  - 优点：
+    - 直接告诉位置，控制方便
+    - 执行简单
+  - 缺点：
+    - 动画可能与物理不一致
+    - 对于艺术家很耗费时间
+
+#### 逆运动学
+- 定义：抓住末尾尖端，计算机提供满足约束条件的关节角度
+- 公式：
+  - $\theta_2=cos^{-1}(\frac{p_z^2+p_x^2-l_1^2-l_2^2}{2l_1l_2})$
+  - $\theta_1=\frac{-p_zl_2sin(\theta_2)+p_x(l_1+l_2cos(\theta_2))}{p_xl_2sin(\theta_2)+p_z(l_1+l_2cos(\theta_2))}$
+- 问题：
+  1. 同一个最终点位可能有多种解决方法
+    <img src="./image/inverse_kinematics_problem1.png" alt="逆运动问题" width="400px"></img>
+    <img src="./image/inverse_kinematics_problem2.png" alt="逆运动问题" width="400px"></img>
+  2. 有可能存在点一直不可能有解决
+    <img src="./image/inverse_kinematics_problem3.png" alt="逆运动问题" width="400px"></img>
+- 一般的n连杆IK问题的数值解
+  - 选择一个初始配置
+  - 定义一个误差度量(例如：当前点与目标点之间距离的平方)
+  - 计算作为配置函数的误差梯度
+  - 应用梯度下降（或牛顿法等）优化过程
+
+### 绑定[Rigging]
+- 定义： 角色上的一组更高级别空间，允许更快速直观的修改姿势、变换、表情等
+- 如同提线木偶一般，通过一些定义的点或面来控制物体
+- 制作需要专业的学习与人工成本
+- 形状混合：
+  - 定义关键帧，通过差值的办法，快速的生成中间的变换
+#### 动作捕捉[Motion Capture]
+- 通过真人的动作点，绑定虚拟人物的控制点
+- 优点：
+  - 贴近真实感
+  - 制作速度快
+- 缺点：
+  - 复杂和昂贵的设置
+  - 不符合艺术设计，需要重新更改，包括准确度
+- 实现方法：
+  - 视觉识别
+  - 磁力
+  - 机械等
+  <img src="./image/motion_capture_equipment.png" alt="动捕设备" width="500px"></img>
+- 过于真实有时候会产生恐怖谷效应[Uncanny valley]
+
+### 动画&电影制作流程
+<img src="./image/production_pipeline.png" alt="动画电影制作流程" width="600px"></img>
+
+### 详细说明一个粒子的模拟
+- 模拟一个粒子在一个速度场中运动
+  <img src="./image/velocity_field.png" alt="电子在速度场中" width="600px"></img>
+  - 首先我们可以假设粒子的运动是由速度场的位置与时间决定的
+    - $v(x, t)$
+  - 在任何一个位置，我们都知道它的速度（常微分方程）
+    - $\frac{dx}{dt}=\.x=v(x, t)$
+#### 欧拉方法
+- 是一种常用的简单迭代方法，但是非常不准确，并且多数情况下不稳定
+- 位置：$x^{t+\Delta t}=x^t+\Delta t\dot x^t$
+- 速度：$\dot x^{t+\Delta t}=\dot x^t+\Delta t\ddot x^t$
+- 误差：步长减小，误差会随之减小
+  <img src="./image/euler_method_error.png" alt="欧拉方法误差" width="600px"></img>
+  - 精度随着模拟的运行会越来越低
+  - 图形学中，精度不是关键
+- 不稳定性
+  <img src="./image/euler_method_unstable.png" alt="欧拉方法不稳定性" width="300px"></img>
+  - 解释图
+    - 在上图的重力井中，粒子不应该离开速度井，但是就算步长再小，粒子也回朝速度井外运动
+    - 在第二幅图中，粒子应该逐渐靠近中间并趋于水平，但是粒子会不断增大误差的向前运动
+  - 误差会不断累加导致不稳定性，甚至在底层系统没有出现偏差
+  - 缺乏稳定性是模拟中一个基础问题，并且不容忽视
+
+#### 解决不稳定性
+- 中间法[Midpoint method / Modified Euler]
+  - 过程
+    - 先进行欧拉方法
+    - 计算由欧拉方法得到的中点的导数（速度）
+    - 从原始点更新点，根据中点的速度
+  - 计算
+    - $x_{mid}=x(t)+\Delta t / 2 \cdot v(x(t), t)$
+    - $x(t+\Delta t)=x(t)+\Delta t \cdot(x_mid, t)$
+  - 更好的结果
+    - $x^{t+\Delta t}=x^t+\frac{\Delta t}{2}(\dot x^t + \dot x^{t+\Delta t})$
+    - $\dot x^{t+\Delta t} = \dot x^t + \Delta t \ddot x^t$
+    - $x^{t+\Delta t} = x^t + \Delta t \dot x^t + \frac{(\Delta^t)^2}{2}\ddot x^t$
+- 自适应步长[Adaptive step size]
+  <img src="./image/adaptive_step_size.png" alt="自适应步长" width="300px"></img>
+  - 利用误差估计步长的选择，非常使用，但是可能需要非常小的步长
+  - 实现
+    - 利用欧拉方法，计算点$x$在步长$T$下$x_T$点的位置
+    - 利用两次欧拉方法，计算点$x$在步长$T/2$情况下，最终点的位置，记作$x_{T/2}$
+    - 计算误差$\|x_T-x_{T/2}\|$
+    - 如果误差大于阈值，则减少步长长度再试一下
+- 隐式欧拉方法
+  - 也被称作反向欧拉方法
+  - 使用未来的导数，计算当前的步长
+    - $x^{t+\Delta t} = x^t + \Delta t \dot x^{t+\Delta t}$
+    - $\dot x^{t+\Delta t} = \dot x^t + \Delta t \ddot x^{t+\Delta t}$
+    - 求解$x^{t+\Delta t}，\dot x^{t+\Delta t}$的非线性问题
+    - 利用求根公式，如牛顿法
+    - 隐式欧拉方法能提供更好的稳定性
+  - 定义稳定性
+    - 局部（每一步）的误差、总误差
+    - 研究误差的绝对值一般是没有意义的
+    - 研究误差的阶，隐式欧拉方法是一阶的：
+      - 局部截断误差：$O(h^2)$
+      - 全局截断无擦：$O(h)$
+    - 理解$O(h)$
+      - 如果把h减小一半，误差也会减小一半
+- 龙格库塔方法[Runge-Kutta Families]
+  - 一类非常擅长解决常微分方程[ODE]，特别是对于解决非线性解
+  - 其中一种常用方法：RK4，一种四阶的方法
+    - 初始条件：
+      - $\frac{dy}{dt}=f(t,y)$
+      - $y(t_0)=y_0$
+    - RK4解决
+      - $y_{n+1}=y_n+\frac{1}{6}h(k_1+2k_2+2k_3+k_4)$
+      - $t_{n+1}=t_n+h$
+      - 其中
+        - $k_1=f(t_n,y_n)$ 
+        - $k_2=f(t_n+\frac{h}{3},y_n+h\frac{k_1}{2})$ 
+        - $k_1=f(t_n+\frac{h}{3},y_n+h\frac{k_2}{2})$ 
+        - $k_1=f(t_n+h,y_n+hk_3)$ 
+- 基于位置/Verlet积分[Position-Based/Verlet Integration]
+  - 非基于物理的方法，通过调整物体的位置使物体满足某种性质
+  - 思想
+    - 在修改欧拉前步（forward-step）之后，约束粒子的位置以防止divergent、不稳定的现象
+    - 使用约束位置计算速度
+    - 这两种思想都会耗散能量，使其具有稳定性
+  - 特点：快速又简单，不是基于物理模拟的，不满足能量守恒
+
+### 刚体模拟
+- 刚体不会发生形变，内部所有力以同一种方式呈现
+- 刚体可以被简化成一个粒子
+- 只是会加入更多的属性
+- $\frac{d}{dt}\begin{pmatrix} X\\ \theta\\ \dot X\\ \omega \end{pmatrix} = \begin{pmatrix} \dot X\\ \omega\\ F/M\\ \Gamma / I \end{pmatrix}$
+  - $X$: 位置
+  - $\theta$: 旋转角度
+  - $\omega$: 角速度
+  - $F$: 力
+  - $\Gamma$: 转矩
+  - $I$: 惯性动量
+
+### 流体模拟
+- 主要思想
+  - 假设水是由小刚体球体组成的
+  - 假设水不能被压缩，意思为水的密度在任何一个位置是恒定的
+  - 所以，如果有某处密度发生变化。就需要通过移动粒子的位置来修正
+  - 对于任何一个小球，你需要知道密度梯度
+  - 更新采用梯度
+- 对大量的物质进行模拟：Eulerian vs. Lagrangian
+  - 拉格朗日视角[质点法\Lagrangian approach]: 比如要模拟一群小鸟活动，盯着每一只小鸟，模拟正确每一只小鸟的运动
+  <img src="./image/lagrangian_approach.png" alt="质点法" width="300px"></img>
+  - 欧拉视角[网格法\Eulerian approach]: 把一个空间分成多个分割的网格
+  <img src="./image/eulerian_approach.png" alt="网格法" width="300px"></img>
+- 物质点法[Material Point Method]
+  - 混合形方法，包含拉格朗日视角与欧拉视角
+  - 拉格朗日：不同粒子拥有材质属性都存到点上
+  - 欧拉：利用网格做数值积分，比如融化等过程
+  - 粒子属性转移到网格上进行计算，后从网格重新转移会给粒子
