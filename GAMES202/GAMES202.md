@@ -44,3 +44,66 @@
     - 硬件运行gpu以一个低采样率进行光线追踪（每像素约1采样）
     - 然后再做降噪
     <img src="./images/interactive_ray_tracing.png" alt="交互式光线追踪" width="600px"></img>
+
+## CG基础回顾
+### 基础的GPU渲染管线
+- 看101，这里不记
+### OpenGL
+- API通过CPU来调用GPU管线，因此语言并不重要
+- 跨平台的
+- 缺点：
+    - 碎片化：有很多不同的版本
+    - C风格的，不容易使用
+    - 早起版本不好调试
+- 会一对一对照101中软件光栅化过程
+- 重要的类比：油画
+    - 放置模型或物体
+        - Model specification（什么物体？）
+        - Model transformation（什么位置）
+        - 用户指定对象定点、法线、纹理坐标，饼将它们作为定点缓存对象（Vertex Buffer Object[VBO]）发生给GPU
+        - 使用openGL函数矩阵，例如glTranslate、glMultMatrix。不需要自己写
+    - 设置画架的位置
+        - View transformation 放置摄像机
+            - 设置相机，例如glPerspective
+                ``` C++
+                void gluPerspective(
+                    GLdouble fovy,
+                    GLdouble aspect,
+                    GLdouble zNear,
+                    GLdouble zFar
+                )
+                ```
+        - Create / use a framebuffer 创建画布
+    - 把画布贴在画架上
+        - 与倒二点合并看
+        - 一个OpenGL的渲染通道
+            - 指定一个帧缓存使用
+            - 指定一个或者多个纹理输出
+                - 特殊情况输出到屏幕，但是可能出现撕裂
+                - 双缓冲：先渲染到帧缓存上，等确认没问题，再输出到屏幕
+            - 渲染：着色器指定每个像素的内容
+    - 在画布上作画
+        - 怎么样着色
+            - 使用定点着色器或者片段着色器
+        - 对于每个定点
+            - 调用OpenGL定点着色：Transform vertex (ModelView, Projection)
+            - 把三角形打成多个像素或者片段
+        - 对于每个片段
+            - OpenGL调用用户指定的片段着色器：着色与光线计算
+            - OpenGL做深度测试，也可以自己做
+    - 将其他画布贴在画架上，继续作画（可选）
+    - 使用之前的画来用（可选）
+- **最关心的: 用户顶底定点和片段着色器**
+    - 其他都是封装的
+    - 甚至是GUI的
+- 总结：
+    - 指定对象、相机、MVP等
+    - 指定framebuffer和输出/输入纹理
+    - 指定顶点/片段着色器
+    - 所有内容都在GPU后，渲染！
+### OpenGL着色器语言（GLSL）
+- 描述
+### 渲染方程
+- 看101，这里不记
+### 微积分
+
