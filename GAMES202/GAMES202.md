@@ -102,8 +102,41 @@
     - 指定顶点/片段着色器
     - 所有内容都在GPU后，渲染！
 ### OpenGL着色器语言（GLSL）
-- 描述
+- 描述定点与片段怎么计算
+- 着色语言看起来很像C语言
+- 有个很长很丰富的历史
+    - 在GPU上写汇编
+    - 斯坦福实时着色语言，运行在SGI
+    - 来自英伟达的Cg
+    - DirectX的HLSH（顶点+像素）
+    - OpenGL的GLSL（顶点+片段）
+- 着色器配置
+    - 初始化
+        - 创建着色器（定点和片段）
+        - 编译着色器
+        - 一个program整合所有的着色器
+        - program连接所有着色器
+        - 使用program
+    - 着色器源也只是字符串序列
+    - 跟普通代码的编译步骤相似
+- 着色器初始化代码
+    <img src="./images/shader_init.png" alt="初始化着色器" width="600px"></img>
+- 着色器连接代码
+    <img src="./images/shader_linking.png" alt="连接着色器" width="600px"></img>
+- 调试着色器
+    - shader是编译好的，在GPU运行，所以难以调试
+    - 几年前, Visual Studio中的NVIDIA Nsight
+        - 可以调试GLSL， 但是得多个CPU
+        - HLSL,得用软件模拟才能跑
+    - 现在
+        - Nsight Graphics（跨平台，只支持NVIDIA GPU）
+        - RenderDoc （跨平台，对GPU没限制）
+        - Spector （WebGL调试）
+    - 打印方法
+        - 把值提前除于一个值，归一化后，把它当成颜色输出出来
+        - 后用类似color picker软件来获取值
 ### 渲染方程
 - 看101，这里不记
 ### 微积分
+
 
