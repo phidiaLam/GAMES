@@ -140,3 +140,40 @@
 ### 微积分
 
 
+## 实时阴影渲染
+### 回顾：阴影映射[Shadow Mapping]
+- 一个两趟的算法
+    - 第一遍：从light的地方看向场景，获取到从light深度最浅（最近）的SM
+    - 第二遍：从相机出发，根据从光线出来的的SM去生成场景
+- 一个完全在图像空间的算法
+    - 优点：SM生成后，不需要实际场景几何
+    - 缺点：自遮挡现象、锯齿问题
+- 一个家喻户晓的方法
+    - 基本的阴影算法
+- Shadow Map问题
+    - 自遮挡
+        - 在每个像素内是一个参数的深度，导致有很多阴影纹路
+            <img src="./images/sm_self_occlusion.png" alt="自遮挡现象" width="300px"></img>
+        - 因为形成的shadow map像素是垂直于light的，在第二次看向场景的时候，打向场景的时候，会因为shadow map记录的值更小，导致阴影渲染错误，如图片中橙色部分
+            - 光从上往下的时候，不会有问题
+            - 光平行于场景的时候，问题会比较严重
+        <img src="./images/self_occlusion_picture.png" alt="自遮挡现象" width="300px"></img>
+        - 解决
+            - 添加偏差来减少自遮挡现象
+                - 在一定距离下，不将遮挡阴影进行计算
+                - 但是会出现物体接近地面的时候，没有阴影的情况
+                - 可以通过光线与物体的角度进行调参，来尽量避免接近底部的物体没有阴影
+                <img src="./images/self_occlusion_bias_solve.png" alt="自遮挡解决" width="300px"></img>
+                <img src="./images/self_occlusion_bias.png" alt="自遮挡解决" width="300px"></img>
+            - 第二深度阴影映射
+                - 通过阴影映射的第一深度和第二深度取中间值来做阴影映射
+                - 但是，它只能用在watertight的物体（需要有两层的物体，比如纸、地面等等建模一层的都不算）
+                - 并且开销并不值得，在实时渲染中，稍微有点复杂的计算都不行。**实时渲染不相信复杂度**
+                <img src="./images/second-depth_shadow_mapping.png" alt="自遮挡解决" width="600px"></img>
+    - 锯齿状
+        - 因为分辨率问题，导致阴影会有很严重的锯齿状
+        <img src="./images/shadowmap_aliasing.png" alt="锯齿" width="600px"></img>
+        - 解决
+            - cascade shadowmap
+                - 不同位置不同分辨率
+            - 动态分辨率
