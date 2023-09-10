@@ -169,7 +169,7 @@
                 - 通过阴影映射的第一深度和第二深度取中间值来做阴影映射
                 - 但是，它只能用在watertight的物体（需要有两层的物体，比如纸、地面等等建模一层的都不算）
                 - 并且开销并不值得，在实时渲染中，稍微有点复杂的计算都不行。**实时渲染不相信复杂度**
-                <img src="./images/second-depth_shadow_mapping.png" alt="自遮挡解决" width="600px"></img>
+                <img src="./images/second-depth_shadow_mapping.png" alt="自遮挡解决  " width="600px"></img>
     - 锯齿状
         - 因为分辨率问题，导致阴影会有很严重的锯齿状
         <img src="./images/shadowmap_aliasing.png" alt="锯齿" width="600px"></img>
@@ -177,3 +177,23 @@
             - cascade shadowmap
                 - 不同位置不同分辨率
             - 动态分辨率
+
+### 阴影映射背后的数学
+- 微积分中有很多有用的不等式
+    - Schwarz不等式：$[\int_a^bf(x)g(x)dx]^2 \leq \int_a^bf^2(x)dx\cdot \int_a^bg^2(x)dx$
+    - Minkowski不等式：$\{\int_a^b[f(x)+g(x)]^2dx\}^\frac{1}{2} \leq \{\int_a^bf^2(x)dx\}^\frac{1}{2}+\{\int_a^bg^2(x)dx\}^\frac{1}{2}$
+- 实时渲染中的不等式
+    - 在实时渲染中，一般更关注的是约等于
+    - 实时渲染中，一个很重要的不等式
+        - $\int_\omega f(x)g(x)dx \approx \frac{\int_\omega f(x)dx}{\int_\omega dx}\cdot \int_\omega g(x)dx$
+    - 什么时候是准确的？
+        - $g(x)$的积分范围很小的时候
+        - $g$函数足够平滑，在它的积分范围内变动不要太大
+- Shadow Mapping使用近似
+    - $L_o(p,\omega_o)=\int_{\omega+}L_i(p,\omega_i)f_r(p,\omega_i,\omega_o)cos\theta_iV(p,\omega_i)d\omega_i$
+        - $L_i(p,\omega_i)$: Lighting
+        - $f_r(p,\omega_i,\omega_o)cos\theta_i$: BRDF
+        - $V(p,\omega_i)$: visibility
+    - 比起GAMES101，这个渲染方程多了一个visibility，但是完全等价。只是在实时渲染中经常把visibility显式的表示出来。
+    - 近视为
+        - $L_o(p,\omega_o) \approx \frac{\int_{\omega+}V(p, \omega_i)d\omega_i}{\int_{\omega+}d\omega_i}\cdot \int_{\omega+}L_i(p,\omega_i)f_r(p,\omega_i,\omega_o)cos\theta_i d\omega_i$
