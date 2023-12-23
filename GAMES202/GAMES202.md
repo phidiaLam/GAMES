@@ -195,5 +195,15 @@
         - $f_r(p,\omega_i,\omega_o)cos\theta_i$: BRDF
         - $V(p,\omega_i)$: visibility
     - 比起GAMES101，这个渲染方程多了一个visibility，但是完全等价。只是在实时渲染中经常把visibility显式的表示出来。
-    - 近视为
+    - 近似为
         - $L_o(p,\omega_o) \approx \frac{\int_{\omega+}V(p, \omega_i)d\omega_i}{\int_{\omega+}d\omega_i}\cdot \int_{\omega+}L_i(p,\omega_i)f_r(p,\omega_i,\omega_o)cos\theta_i d\omega_i$
+        - 什么时候是准确的？
+            - 积分是很小的时候是准确的
+                - 一维的时候小成$\Delta$或者一个点的时候
+                - 也就是点光源或者方向光源的时候
+            - 平滑的积分
+                - diffuse brdf或者恒定亮度区域照明
+        - 之后会再环境遮挡[Ambient Occlusions]中使用到
+
+### PCSS[Percentage closer soft shadows]
+- 
