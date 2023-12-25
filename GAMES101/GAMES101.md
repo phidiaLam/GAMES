@@ -327,10 +327,14 @@
       <img src="./image/aliases.png" alt="采样不足" width="500px"></img>
   - 滤波
     排除掉一些指定的波频
-    下面是一些例子，其中中心代表低频，旁边代表高频： - 原图：
-    <img src="./image/filter1.png" alt="原图" width="200px"></img> - 滤掉高频（Egdes）：
-    <img src="./image/filter3.png" alt="滤掉高频" width="200px"></img> - 滤掉低频（blur）：
-    <img src="./image/filter2.png" alt="滤掉低频" width="200px"></img> - 滤掉高频与低频：
+    下面是一些例子，其中中心代表低频，旁边代表高频： 
+    - 原图：
+    <img src="./image/filter1.png" alt="原图" width="200px"></img> 
+    - 滤掉高频（Egdes）：
+    <img src="./image/filter3.png" alt="滤掉高频" width="200px"></img> 
+    - 滤掉低频（blur）：
+    <img src="./image/filter2.png" alt="滤掉低频" width="200px"></img> 
+    - 滤掉高频与低频：
     <img src="./image/filter4.png" alt="滤掉高频与低频" width="200px"></img>
     <img src="./image/filter5.png" alt="滤掉高频与低频" width="200px"></img>
   - 卷积
